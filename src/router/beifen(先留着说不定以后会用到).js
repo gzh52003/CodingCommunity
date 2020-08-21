@@ -29,62 +29,62 @@ Vue.use(VueRouter)
 // 3. 实例化并配置参数
 const router = new VueRouter({
   // mode:'history', // 一般上线后改为history路由(需要额外配置服务器)
-  routes: [
-    {
-      path: '/',
+  routes: [{
+      path: '/', // /->/home
       redirect: '/login'
     },
+    {path: '/public', 
+    component: Public
+    },
     {
-      path: '/public',
-      component: Public,
-      children: [{
-          path: '/',
-          redirect: '/home'
-        },
+      path: '/home',
+      component: Home
+    },
+    {
+      path: '/user',
+      component: User,
+      children: [
+        // 进入用户管理页面直接跳到用户列表
         {
-          path: '/home',
-          component: Home
-        },
+          path: '',
+          redirect: 'list'
+        }, {
+          path: 'add',
+          component: UserAdd
+        }, {
+          path: 'list',
+          component: UserList
+        }, {
+          name: 'userEdit',
+          path: 'edit/:id',
+          component: UserEdit
+        }
+      ]
+    },
+    {
+      path: '/blogs',
+      component: Blogs,
+      children: [
         {
-          path: '/user',
-          component: User,
-          children: [{
-            path: '',
-            redirect: 'list'
-          }, {
-            path: 'add',
-            component: UserAdd
-          }, {
-            path: 'list',
-            component: UserList
-          }, {
-            name: 'userEdit',
-            path: 'edit/:id',
-            component: UserEdit
-          }]
-        },
+          path: '',
+          redirect: 'blogshome'
+        }, {
+          path: 'blogshome',
+          component: BlogsHome
+        }
+      ]
+    },
+    {
+      path: '/comments',
+      component: Comments,
+      children: [
         {
-          path: '/blogs',
-          component: Blogs,
-          children: [{
-            path: '',
-            redirect: 'blogshome'
-          }, {
-            path: 'blogshome',
-            component: BlogsHome
-          }]
-        },
-        {
-          path: '/comments',
-          component: Comments,
-          children: [{
-            path: '',
-            redirect: 'commentshome'
-          }, {
-            path: 'commentshome',
-            component: CommentsHome
-          }]
-        },
+          path: '',
+          redirect: 'commentshome'
+        }, {
+          path: 'commentshome',
+          component: CommentsHome
+        }
       ]
     },
     {
@@ -100,6 +100,7 @@ const router = new VueRouter({
       path: '/404',
       component: NotFound
     },
+
     // 404页面效果
     {
       path: '*',
