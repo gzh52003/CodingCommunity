@@ -4,73 +4,76 @@
       <el-header class="header">掘金社区</el-header>
     </el-container>
     <h2>欢迎登录</h2>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm log"
-    >
-      <el-form-item label="用户名" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-      </el-form-item>
+    <el-row type="flex" justify="center">
+      <el-form
+        class="log"
+        ref="formData"
+        :model="formData"
+        :rules="rules"
+        label-width="80px"
+        @keyup.enter.native="login()"
+      >
+        <el-form-item prop="userName" label="用户名">
+          <el-input
+            v-model="formData.userName"
+            placeholder="请输入用户名"
+            prefix-icon="icon-login_user"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password" label="密码">
+          <el-input
+            v-model="formData.password"
+            placeholder="请输入密码"
+            type="password"
+            prefix-icon="icon-login_pwd"
+            clearable
+          ></el-input>
+        </el-form-item>
 
-      <el-form-item>
-        <el-button size="small" type="primary" @click="submitForm('ruleForm')">登录</el-button>
-        <el-button size="small" @click="resetForm('ruleForm')">免费注册</el-button>
-      </el-form-item>
-    </el-form>
+        <el-form-item>
+          <el-button
+            size="small"
+            type="primary"
+            class="btn"
+            @click="login('formData')"
+            icon="el-icon-upload"
+          >登录</el-button>
+          <el-button size="small" @click="resetForm('formData')">重置</el-button>
+        </el-form-item>
+        <router-link to="reg" style="color:red">没有账号？马上注册</router-link>
+      </el-form>
+    </el-row>
   </div>
 </template>
 <script>
 export default {
   data() {
-    var checkName = (rule, value, callback) => {
-      if (value === "") {
-        return callback(new Error("用户名不能为空"));
-      } else {
-        if (this.ruleForm.checkName !== "") {
-          this.$refs.ruleForm.validateField("checkName");
-        }
-        callback();
-      }
-    };
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-
     return {
-      ruleForm: {
-        pass: "",
-
-        name: "",
+      formData: {
+        userName: "",
+        password: "",
       },
       rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-
-        name: [
-          { validator: checkName, trigger: "blur" },
+        userName: [
+          { required: true, message: "用户名不能为空", trigger: "blur" },
           { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
         ],
       },
     };
   },
   methods: {
-    submitForm(formName) {
+    login(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$message({
+            type: "success",
+            message: "登录成功",
+          });
+          this.$router.push({ name: "home" });
         } else {
           console.log("error submit!!");
           return false;
