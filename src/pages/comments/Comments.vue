@@ -40,17 +40,20 @@ export default {
         .replace(/:\d{1,2}$/, " ");
     },
   },
-  created() {
-    let commentList = [
-      {
-        comment_content:
-          "Linux版本的nc是被阉割的，有一个参数不能用。要重新编译。还有一个工具也不错lcx，同样有win/lnx版本",
-        comment_id: "6863202386459377672",
-        comment_status: 1,
-        ctime: 1597963838,
-        userName: "小明",
-      },
-    ];
+  async created() {
+    // let commentList = [
+    //   {
+    // comment_content:
+    //   "Linux版本的nc是被阉割的，有一个参数不能用。要重新编译。还有一个工具也不错lcx，同样有win/lnx版本",
+    // comment_id: "6863202386459377672",
+    // comment_status: 1,
+    // ctime: 1597963838,
+    // userName: "小明",
+    //   },
+    // ];
+    let commentList = await this.$request.get("/comment");
+    commentList = commentList.data.data;
+    console.log(commentList);
     commentList = commentList.map((item) => {
       item.ctime = getLocalTime(item.ctime);
       return item;
