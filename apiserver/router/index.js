@@ -1,12 +1,18 @@
-const comment = require('../')
+const comment = require('./comment/comment')
 const express = require('express')
-
+const cors = require('./filter/cors');
 const router = express.Router()
+
 
 router.use(express.urlencoded({
     extended: false
 }), express.json())
 
-router.use('/user', user)
-router.use('/comment', comment)
+router.use(cors)
+// router.use('/user', user)
+
+router.use('/comment', comment);
+
+
+
 module.exports = router
