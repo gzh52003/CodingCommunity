@@ -22,3 +22,5 @@ router.get('/', async (res, req) => {
         req.send(1002);
     }
 })
+
+module.exports = router
