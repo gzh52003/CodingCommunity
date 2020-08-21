@@ -1,17 +1,16 @@
 <template>
   <div>
-    <el-table
-      ref="multipleTable"
-      :data="userlist"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table ref="multipleTable" :data="userlist" tooltip-effect="dark" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index" label="#" width="55"></el-table-column>
-      <el-table-column label="用户名" prop="username"></el-table-column>
-      <el-table-column prop="age" label="年龄" width="120"></el-table-column>
-      <el-table-column prop="gender" label="性别" width="120" show-overflow-tooltip></el-table-column>
+      <el-table-column label="用户名" width="150" prop="item_info.author_user_info.user_name"></el-table-column>
+      <el-table-column prop="item_info.author_user_info.job_title" label="职位" width="200"></el-table-column>
+      <el-table-column
+        prop="item_info.author_user_info.company"
+        label="公司"
+        width="200"
+        show-overflow-tooltip
+      ></el-table-column>
       <el-table-column label="操作" width="120">
         <!-- 需要获取数据id -->
         <!-- <slot name="title"></slot>
@@ -35,8 +34,10 @@
             @click="deleteUser(scope.row._id)"
           ></el-button>
         </template>
+       
       </el-table-column>
     </el-table>
+     <el-pagination  background layout="prev, pager, next" :total="30" @click='page()' style="text-align:center"></el-pagination>
   </div>
 </template>
 <script>
@@ -67,14 +68,15 @@ export default {
     },
     goto(id) {
       // 跳转路由传参
-    //   this.$router.push("/user/edit/"+id + '?a=10');
+      //   this.$router.push("/user/edit/"+id + '?a=10');
       this.$router.push({
-          name:'userEdit',
-          params:{id},
-          query:{
-              a:10,b:20
-          }
-      })
+        name: "userEdit",
+        params: { id },
+        query: {
+          a: 10,
+          b: 20,
+        },
+      });
     },
   },
   async created() {
@@ -84,10 +86,15 @@ export default {
     //     method:'get',
     //
     // })
-    const { data } = await this.$request.get("/user");
-    console.log(data);
+    const { data } = await this.$request.get("/");
+    console.log(data.data[0].data);
 
-    this.userlist = data.data;
+    this.userlist = data.data[0].data;
+    this.userlist = this.userlist.filter((item) => {
+      // console.log(item.item_info.author_user_info)
+      return item.item_info.author_user_info !== undefined;
+    });
+    console.log(this.userlist);
   },
 };
 </script>
