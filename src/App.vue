@@ -1,17 +1,18 @@
 <template>
   <div id="app">
     <router-link to="/manage" id="nav">后台管理系统</router-link>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-    }
+      menu: [],
+    };
   },
-  methods:{}
-}
+  methods: {},
+};
 </script>
 
 <style lang="scss">
