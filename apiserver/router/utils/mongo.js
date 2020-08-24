@@ -2,6 +2,7 @@ const {
     MongoClient,
     ObjectId
 } = require('mongodb');
+
 const url = 'mongodb://localhost:27017';
 const dbname = 'community';
 
@@ -83,15 +84,48 @@ async function remove(colName, id) {
         db,
         client
     } = await connect();
+    let arr = [];
     let query = {};
-    if (id && typeof id === 'string') {
-        query._id = ObjectId(id);
-    }
+    let queryArr = {};
     const collection = db.collection(colName);
-    const result = await collection.deleteMany(query);
+    if (id) {
+        if (id instanceof Array) {
+            for (var i of id) {
+                queryArr._id = ObjectId(i);
+                arr.push(queryArr._id);
+            }
+            const result = await collection.deleteMany({
+                _id: {
+                    $in: arr
+                }
+            });
+            client.close();
+            return result;
+        }
+        if (typeof id === "string") {
+            query._id = ObjectId(id);
+            const result = await collection.deleteMany(query);
+            client.close();
+            return result
+        }
+    }
+    // if (id && typeof id === 'string') {
+    //     idArr = id.split(",");
+    //     idArr.forEach(item => {
+    //         let query = {};
+    //         query._id = ObjectId(item);
+    //         queryList.push(query)
+    //     })
+    //     console.log(queryList);
+    //     const result = await collection.deleteMany(queryList);
+    //     client.close();
+    //     return result;
+    // }
     client.close();
-    return result;
+    return;
 }
+
+
 // 修改
 async function updateById(colName, query, id) {
     const {
@@ -114,5 +148,6 @@ module.exports = {
     find,
     insert,
     remove,
-    updateById
+    updateById,
+
 }
