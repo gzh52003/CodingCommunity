@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-select v-model="value" placeholder="请选择" @change="selected">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-select>
     <el-table
       :data="commentList"
       :stripe="true"
@@ -40,6 +43,7 @@
       </span>
     </el-dialog>
     <el-pagination
+      v-if="showPage"
       background
       layout="prev, pager, next"
       :total="total"
@@ -55,15 +59,22 @@ import getLocalTime from "../../utils/formatTime";
 export default {
   data() {
     return {
+      options: [
+        { value: "all", label: "全部" },
+        { value: 5, label: "每页5条" },
+        { value: 10, label: "每页10条" },
+      ],
       commentList: [],
       pageNo: 1,
-      pageSize: 3,
+      pageSize: 5,
       total: 0,
       multiDeleteVisible: false,
       multipleSelectionFlag: false,
       removeCount: 0,
       removeArr: [],
       idArr: [],
+      value: 5,
+      showPage: true,
     };
   },
   methods: {
@@ -74,6 +85,31 @@ export default {
     },
     dialogVisible() {
       this.multiDeleteVisible = false;
+    },
+    async selected() {
+      if (this.value === "all") {
+        this.showPage = false;
+        let commentList = await this.$request.get(`/comment`);
+        commentList = commentList.data.data;
+        commentList = commentList.map((item) => {
+          item.ctime = getLocalTime(item.ctime);
+          return item;
+        });
+        this.commentList = commentList;
+      } else {
+        this.showPage = true;
+        this.pageSize = this.value;
+        this.pageNo = 1;
+        let commentList = await this.$request.get(
+          `/comment?pageNo=${this.pageNo}&pageSize=${this.pageSize}`
+        );
+        commentList = commentList.data.data;
+        commentList = commentList.map((item) => {
+          item.ctime = getLocalTime(item.ctime);
+          return item;
+        });
+        this.commentList = commentList;
+      }
     },
     async changePage(pageNo) {
       this.pageNo = pageNo;
