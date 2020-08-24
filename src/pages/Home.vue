@@ -1,15 +1,6 @@
 <template>
-    <div>
-        Home
-    </div>
+  <div>Home</div>
 </template>
 <script>
-export default {
-    beforeDestroy(){
-        console.log('beforeDestroy')
-    },
-    destroyed(){
-        console.log('destroyed')
-    }
-}
+export default {};
 </script>
