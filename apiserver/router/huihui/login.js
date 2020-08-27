@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     let {
         username,
         password,
-        //vcode,
+        vcode,
         mdl
     } = req.query;
 
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
         }));
     } else {
         res.send(formatData({
-            code: 1003
+            code: 0
         }))
     }
 })

@@ -29,7 +29,9 @@ router.post('/', async (req, res) => {
             username,
             password
         });
-        res.send(formatData());
+        res.send(formatData({
+            data: result
+        }));
     } catch (err) {
         res.send(forMatData({
             code: 0
@@ -37,14 +39,14 @@ router.post('/', async (req, res) => {
 
     }
 })
-
-router.post('/check', async (req, res) => {
+// 查询数据是否被占用
+router.get('/check', async (req, res) => {
     const {
-        username
+        userName
     } = req.query;
 
     const result = await mongo.find('juejin', {
-        username
+        username: userName
     });
     if (result.length > 0) {
         res.send(formatData({

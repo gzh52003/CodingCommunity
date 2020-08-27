@@ -1,12 +1,11 @@
-function Enum(code, data, msg) {
-    code = code || 1001;
-    data = data || [];
-    msg = msg || "success";
-
-    msg = code === 1002 ? "fail" : "success";
-    msg = code === 1003 ? "fail" : "success";
-    msg = code === 1004 ? "token过期" : "success";
-
+function Enum({
+    code = 1,
+    data = [],
+    msg = "success"
+} = {}) {
+    if (code === 0) {
+        msg = "fail"
+    }
     return {
         code,
         data,

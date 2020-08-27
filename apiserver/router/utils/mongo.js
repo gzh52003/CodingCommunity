@@ -6,7 +6,9 @@ const url = 'mongodb://localhost:27017';
 const dbname = 'community';
 
 async function connect() {
-    const client = await MongoClient.connect(url);
+    const client = await MongoClient.connect(url, {
+        useUnifiedTopology: true
+    });
     const db = client.db(dbname);
     return {
         client,

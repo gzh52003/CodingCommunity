@@ -6,27 +6,18 @@
           <i class="el-icon-connection"></i>后台管理系统
         </el-col>
         <el-col :span="12" style="text-align:right">
-          <el-button type="text">注册</el-button>
-          <el-button type="text">登录</el-button>
+          {{this.name + '  欢迎你！'}}
+          <el-button @click='loginOut' style="color:#fff" type="info" size="small">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
 
     <el-container>
       <el-aside width="200px">
-        <el-menu
-          style="height:100%"
-          :default-active="activeIndex"
-          mode="vertical"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ff0"
-          @select="changeMenu"
-          :default-openeds="openMenu"
-          router
-        >
+        <el-menu style="height:100%" :default-active="activeIndex" mode="vertical" background-color="#545c64"
+          text-color="#fff" active-text-color="#ff0" @select="changeMenu" :default-openeds="openMenu" router>
           <template v-for="item in menu">
-            <el-menu-item :index="item.path" :key="item.path"  v-if="!item.submenu">
+            <el-menu-item :index="item.path" :key="item.path" v-if="!item.submenu">
               <i :class="item.icon" style="color:#fff"></i>
               {{item.text}}
             </el-menu-item>
@@ -34,7 +25,8 @@
               <template v-slot:title>
                 <i :class="item.icon" style="color:#fff"></i>{{item.text}}
               </template>
-              <el-menu-item :key="sub.path" :index="item.path+sub.path" v-for="sub in item.submenu">{{sub.text}}</el-menu-item>
+              <el-menu-item :key="sub.path" :index="item.path+sub.path" v-for="sub in item.submenu">{{sub.text}}
+              </el-menu-item>
             </el-submenu>
           </template>
         </el-menu>
@@ -54,88 +46,104 @@
   </el-container>
 </template>
 <script>
-export default {
-  name: "Public",
-  data() {
-    return {
-      activeIndex: "/home",
-      openMenu:[],
-      menu: [
-        {
-          text: "首页",
-          path: "/home",
-          icon: "el-icon-s-home",
-        },
-        {
-          text: "用户管理",
-          path: "/user",
-          icon: "el-icon-user-solid",
-          submenu: [
-            {
-              text: "添加用户",
-              path: "/add",
-            },
-            {
-              text: "用户列表",
-              path: "/list",
-            },
-          ],
-        },
-        {
-          text: "文章管理",
-          path: "/blogs",
-          icon: "el-icon-grape",
-        },
-        {
-          text: "评论管理",
-          path: "/comments",
-          icon: "el-icon-s-order",
-        },
-      ],
-      currentIndex: 0,
-    };
-  },
-  methods: {
-    goto(path, idx) {
-      console.log(this.$router);
-      this.$router.push(path);
-      // this.$router.replace(path);
-      this.currentIndex = idx;
+  export default {
+    name: "Public",
+    data() {
+      return {
+        activeIndex: "/home",
+        openMenu: [],
+        menu: [{
+            text: "首页",
+            path: "/home",
+            icon: "el-icon-s-home",
+          },
+          {
+            text: "用户管理",
+            path: "/user",
+            icon: "el-icon-user-solid",
+            submenu: [{
+                text: "添加用户",
+                path: "/add",
+              },
+              {
+                text: "用户列表",
+                path: "/list",
+              },
+            ],
+          },
+          {
+            text: "文章管理",
+            path: "/blogs",
+            icon: "el-icon-grape",
+          },
+          {
+            text: "评论管理",
+            path: "/comments",
+            icon: "el-icon-s-order",
+          },
+        ],
+        currentIndex: 0,
+      };
     },
-    back() {
-      this.$router.back();
+    computed: {
+      name() {
+        return JSON.parse(localStorage.getItem('token'))["username"];
+      }
+
     },
-    changeMenu(path) {
-      this.activeIndex = path;
+    methods: {
+      goto(path, idx) {
+        console.log(this.$router);
+        this.$router.push(path);
+        // this.$router.replace(path);
+        this.currentIndex = idx;
+      },
+      back() {
+        this.$router.back();
+      },
+      changeMenu(path) {
+        this.activeIndex = path;
+      },
+      loginOut() {
+        localStorage.removeItem('token');
+        this.$router.push('/login');
+      }
     },
-  },
-  components: {},
-};
+    components: {}
+  };
 </script>
 
+
 <style lang="scss">
-html{height:100%}
-body {
-  margin: 0;
-  height:100%
-}
-.header {
-  line-height: 60px;
-  color: #fff;
-  background-color: rgba(84, 92, 100, 0.9);
-  .logo {
-    font-size: 24px;
-    color: #fc0;
-    i {
-      font-size: 40px;
-      vertical-align: middle;
-      margin-right: 5px;
+  html {
+    height: 100%
+  }
+
+  body {
+    margin: 0;
+    height: 100%
+  }
+
+  .header {
+    line-height: 60px;
+    color: #fff;
+    background-color: rgba(84, 92, 100, 0.9);
+
+    .logo {
+      font-size: 24px;
+      color: #fc0;
+
+      i {
+        font-size: 40px;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
     }
   }
-}
-.is-active {
-  i {
-    color: inherit !important;
+
+  .is-active {
+    i {
+      color: inherit !important;
+    }
   }
-}
 </style>
