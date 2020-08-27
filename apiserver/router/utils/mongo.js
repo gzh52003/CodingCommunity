@@ -7,7 +7,9 @@ const url = 'mongodb://localhost:27017';
 const dbname = 'community';
 
 async function connect() {
-    const client = await MongoClient.connect(url);
+    const client = await MongoClient.connect(url, {
+        useUnifiedTopology: true
+    });
     const db = client.db(dbname);
     return {
         client,
@@ -38,12 +40,6 @@ async function find(colName, query, options) {
 
     // 这里有回调函数
     let result = collection.find(query, opt);
-    if (options.skip) {
-        result = result.skip(options.skip);
-    }
-    if (options.pagesize) {
-        result = result.limit(options.pagesize);
-    }
 
     if (options.sort) {
         let sort = options.sort;
@@ -61,6 +57,13 @@ async function find(colName, query, options) {
         })
     }
 
+    if (options.skip) {
+        result = result.skip(options.skip);
+    }
+
+    if (options.pagesize) {
+        result = result.limit(options.pagesize);
+    }
     result = await result.toArray();
     client.close();
     return result;

@@ -3,7 +3,7 @@ import Vue from 'vue';
 // 1. 引入Vue-Router
 import VueRouter from 'vue-router'
 import Public from '../Pub.vue'
-
+import axios from "axios"
 import Home from '../pages/Home.vue'
 
 import User from '../pages/user/Default.vue'
@@ -29,8 +29,7 @@ Vue.use(VueRouter)
 // 3. 实例化并配置参数
 const router = new VueRouter({
   // mode:'history', // 一般上线后改为history路由(需要额外配置服务器)
-  routes: [
-    {
+  routes: [{
       path: '/',
       redirect: '/login'
     },
@@ -107,6 +106,34 @@ const router = new VueRouter({
     }
   ]
 })
+
+//  校验token是否一致
+router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
+  // 重登陆删除本地数据
+  if (to.path === '/login') {
+    localStorage.removeItem('token')
+  }
+  let user = JSON.parse(localStorage.getItem('token'))
+
+  let res = await axios.get('http://localhost:10000/api/jwtverify', {
+    params: {
+      authorization: user
+    }
+  })
+
+  // 登录验证：如果本地没有储存用户且不在登录页面则跳转
+  if (!res.data.code && to.path !== '/login') {
+    next({
+      path: '/login'
+    })
+  } else {
+    next()
+  }
+})
+
+
+
+
 
 export default router;
 
