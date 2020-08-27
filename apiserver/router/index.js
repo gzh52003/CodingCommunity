@@ -5,8 +5,6 @@ const cors = require('./filter/cors');
 const user = require('./userlist/user')
 const router = express.Router()
 const token = require('./utils/token')
-
-const router = express.Router()
 const {
     formatData
 } = require('./utils/tools')

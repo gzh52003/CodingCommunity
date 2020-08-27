@@ -30,11 +30,11 @@ async function find(colName, query, options) {
     if (query._id) {
         query._id = ObjectId(query._id);
     }
-   
-    if(options.status){
-      query.status={
-        $eq:options.status*1
-      }
+
+    if (options.status) {
+        query.status = {
+            $eq: options.status * 1
+        }
     }
     console.log(query);
     const opt = {};
@@ -88,7 +88,7 @@ async function insert(colName, query) {
 
     return result;
 }
-// 删除（健壮）
+// 删除（健壮被删除）
 async function remove(colName, id) {
     const {
         db,
@@ -98,8 +98,39 @@ async function remove(colName, id) {
     let query = {};
     let queryArr = {};
     const collection = db.collection(colName);
-    console.log(query);
-    const result = await collection.deleteMany(query);
+    if (id) {
+        if (id instanceof Array) {
+            for (var i of id) {
+                queryArr._id = ObjectId(i);
+                arr.push(queryArr._id);
+            }
+            const result = await collection.deleteMany({
+                _id: {
+                    $in: arr
+                }
+            });
+            client.close();
+            return result;
+        }
+        if (typeof id === "string") {
+            query._id = ObjectId(id);
+            const result = await collection.deleteMany(query);
+            client.close();
+            return result
+        }
+    }
+    // if (id && typeof id === 'string') {
+    //     idArr = id.split(",");
+    //     idArr.forEach(item => {
+    //         let query = {};
+    //         query._id = ObjectId(item);
+    //         queryList.push(query)
+    //     })
+    //     console.log(queryList);
+    //     const result = await collection.deleteMany(queryList);
+    //     client.close();
+    //     return result;
+    // }
     client.close();
     return;
 }
