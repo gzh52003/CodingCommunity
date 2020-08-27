@@ -3,7 +3,7 @@ const blog = require('./blog')
 const express = require('express')
 const cors = require('./filter/cors')
 const token = require('./utils/token')
-
+const user = require('./userlist/user')
 const router = express.Router()
 const {
     formatData
@@ -21,7 +21,7 @@ router.use(express.urlencoded({
 
 router.use(cors)
 // router.use('/user', user)
-
+router.use('/user', user)
 router.use('/comment', comment);
 router.use('/blog', blog);
 router.use('/asd', user);

@@ -23,7 +23,6 @@ async function connect() {
 async function find(colName, query, options) {
     query = query || {};
     options = options || {};
-
     const {
         client,
         db
@@ -31,6 +30,13 @@ async function find(colName, query, options) {
     if (query._id) {
         query._id = ObjectId(query._id);
     }
+
+    if (options.status) {
+        query.status = {
+            $eq: options.status * 1
+        }
+    }
+    console.log(query);
     const opt = {};
     if (options.field) {
         opt.projection = options.field;
@@ -40,6 +46,7 @@ async function find(colName, query, options) {
 
     // 这里有回调函数
     let result = collection.find(query, opt);
+
 
     if (options.sort) {
         let sort = options.sort;
