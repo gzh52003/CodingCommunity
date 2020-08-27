@@ -5,15 +5,17 @@
 </template>
 <script>
 export default {
-  name: "App"
-}
+  name: "App",
+};
 </script>
 
 <style lang="scss">
-html{height:100%}
+html {
+  height: 100%;
+}
 body {
   margin: 0;
-  height:100%
+  height: 100%;
 }
 .header {
   line-height: 60px;

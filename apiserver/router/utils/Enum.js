@@ -1,7 +1,4 @@
-function Enum(code, data, msg) {
-    code = code || 1001;
-    data = data || [];
-    msg = msg || "success";
+function Enum(code = 1001, data = [], msg = "success") {
     switch (code) {
         case 1002:
             msg = "fail";
@@ -19,6 +16,7 @@ function Enum(code, data, msg) {
         msg
     }
 }
+
 module.exports = {
     Enum
 }

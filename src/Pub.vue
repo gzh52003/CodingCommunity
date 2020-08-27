@@ -6,8 +6,8 @@
           <i class="el-icon-connection"></i>后台管理系统
         </el-col>
         <el-col :span="12" style="text-align:right">
-          <el-button type="text">注册</el-button>
-          <el-button type="text">登录</el-button>
+          {{this.name + ' 欢迎你！'}}
+          <el-button @click="loginOut" style="color:#fff" type="info" size="small">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -100,6 +100,11 @@ export default {
       currentIndex: 0,
     };
   },
+  computed: {
+    name() {
+      return JSON.parse(localStorage.getItem("token"))["username"];
+    },
+  },
   methods: {
     goto(path, idx) {
       console.log(this.$router);
@@ -113,10 +118,15 @@ export default {
     changeMenu(path) {
       this.activeIndex = path;
     },
+    loginOut() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
   },
   components: {},
 };
 </script>
+
 
 <style lang="scss">
 html {
@@ -139,10 +149,10 @@ body {
       margin-right: 5px;
     }
   }
-}
-.is-active {
-  i {
-    color: inherit !important;
+  .is-active {
+    i {
+      color: inherit !important;
+    }
   }
 }
 </style>
