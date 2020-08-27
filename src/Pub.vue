@@ -26,15 +26,20 @@
           router
         >
           <template v-for="item in menu">
-            <el-menu-item :index="item.path" :key="item.path"  v-if="!item.submenu">
+            <el-menu-item :index="item.path" :key="item.path" v-if="!item.submenu">
               <i :class="item.icon" style="color:#fff"></i>
               {{item.text}}
             </el-menu-item>
             <el-submenu :key="item.path" :index="item.path" v-else>
               <template v-slot:title>
-                <i :class="item.icon" style="color:#fff"></i>{{item.text}}
+                <i :class="item.icon" style="color:#fff"></i>
+                {{item.text}}
               </template>
-              <el-menu-item :key="sub.path" :index="item.path+sub.path" v-for="sub in item.submenu">{{sub.text}}</el-menu-item>
+              <el-menu-item
+                :key="sub.path"
+                :index="item.path+sub.path"
+                v-for="sub in item.submenu"
+              >{{sub.text}}</el-menu-item>
             </el-submenu>
           </template>
         </el-menu>
@@ -59,7 +64,7 @@ export default {
   data() {
     return {
       activeIndex: "/home",
-      openMenu:[],
+      openMenu: [],
       menu: [
         {
           text: "首页",
@@ -114,10 +119,12 @@ export default {
 </script>
 
 <style lang="scss">
-html{height:100%}
+html {
+  height: 100%;
+}
 body {
   margin: 0;
-  height:100%
+  height: 100%;
 }
 .header {
   line-height: 60px;
