@@ -1,13 +1,9 @@
 const comment = require('./comment/comment')
 const blog = require('./blog')
 const express = require('express')
-<<<<<<< HEAD
 const cors = require('./filter/cors')
-=======
 const token = require('./utils/token')
 
-const cors = require('./filter/cors');
->>>>>>> 3c23c9ddd0663a0e270f569d47f63f7bf897ef19
 const router = express.Router()
 const {
     formatData
@@ -27,9 +23,7 @@ router.use(cors)
 // router.use('/user', user)
 
 router.use('/comment', comment);
-<<<<<<< HEAD
 router.use('/blog', blog);
-=======
 router.use('/asd', user);
 //注册登入
 router.use('/login', login);
@@ -55,7 +49,6 @@ router.get('/jwtverify', (req, res) => {
     }
 });
 
->>>>>>> 3c23c9ddd0663a0e270f569d47f63f7bf897ef19
 
 
 module.exports = router
