@@ -10,7 +10,7 @@ Vue.use(ElementUI)
 // 通过原型链共享ajax请求的方法
 Vue.prototype.$request = request
 
-new Vue({
+  new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')

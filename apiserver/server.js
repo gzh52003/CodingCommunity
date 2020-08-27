@@ -1,14 +1,12 @@
 const express = require('express')
-const {
-    PORT
-} = require('./config.json')
+const {PORT} = require('./config.json')
 const allRouter = require('./router')
+
 const app = express()
 
 // 获取商品路由
-app.use('/api', allRouter)
+app.use('/api',allRouter)
 
-
-app.listen(PORT, () => {
+app.listen(PORT,()=>{
     console.log(`server is runing on port ${PORT}`)
 })
