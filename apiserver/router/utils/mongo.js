@@ -81,7 +81,7 @@ async function insert(colName, query) {
 
     return result;
 }
-// 删除（健壮）
+// 删除（健壮被删除）
 async function remove(colName, id) {
     const {
         db,
