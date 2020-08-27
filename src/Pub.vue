@@ -92,6 +92,7 @@ export default {
           icon: "el-icon-s-order",
         },
       ],
+      
       currentIndex: 0,
     };
   },

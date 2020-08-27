@@ -1,6 +1,7 @@
 const comment = require('./comment/comment')
+const blog = require('./blog')
 const express = require('express')
-const cors = require('./filter/cors');
+const cors = require('./filter/cors')
 const router = express.Router()
 
 
@@ -12,7 +13,7 @@ router.use(cors)
 // router.use('/user', user)
 
 router.use('/comment', comment);
-
+router.use('/blog', blog);
 
 
 module.exports = router

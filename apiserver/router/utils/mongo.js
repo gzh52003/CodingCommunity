@@ -37,12 +37,6 @@ async function find(colName, query, options) {
 
     // 这里有回调函数
     let result = collection.find(query, opt);
-    if (options.skip) {
-        result = result.skip(options.skip);
-    }
-    if (options.pagesize) {
-        result = result.limit(options.pagesize);
-    }
 
     if (options.sort) {
         let sort = options.sort;
@@ -60,6 +54,13 @@ async function find(colName, query, options) {
         })
     }
 
+    if (options.skip) {
+        result = result.skip(options.skip);
+    }
+
+    if (options.pagesize) {
+        result = result.limit(options.pagesize);
+    }
     result = await result.toArray();
     client.close();
     return result;
@@ -78,17 +79,17 @@ async function insert(colName, query) {
     return result;
 }
 // 删除
-async function remove(colName, id) {
-    const {
-        db,
-        client
-    } = await connect();
-    let query = {};
-    if (id && typeof id === 'string') {
-        query._id = ObjectId(id);
+async function remove(colName,query){ // query{_id:'5c128cdbd1233ce12c878a32'}
+    const {db,client} = await connect();
+
+    if(query._id && typeof query._id === 'string'){
+        query._id = ObjectId(query._id);
     }
+
     const collection = db.collection(colName);
+    
     const result = await collection.deleteMany(query);
+
     client.close();
     return result;
 }

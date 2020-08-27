@@ -1,18 +1,12 @@
-function Enum(code, data, msg) {
-    code = code || 1001;
-    data = data || [];
-    msg = msg || "success";
-
-    msg = code === 1002 ? "fail" : "success";
-    msg = code === 1003 ? "fail" : "success";
-    msg = code === 1004 ? "token过期" : "success";
-
+function Enum(code=1, data=[], msg="successs") {
+    msg = code === 0 ? "fail" : "successs"
     return {
         code,
         data,
         msg
     }
 }
+
 module.exports = {
     Enum
 }
