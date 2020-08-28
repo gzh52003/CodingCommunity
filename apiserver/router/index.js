@@ -1,10 +1,13 @@
 const comment = require('./comment/comment')
 const blog = require('./blog')
 const express = require('express')
+const session = require("express-session")
+
+const token = require('./utils/token')
+const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
 const user = require('./userlist/user')
 const router = express.Router()
-const token = require('./utils/token')
 const {
     formatData
 } = require('./utils/tools')
@@ -21,6 +24,16 @@ router.use(express.urlencoded({
 router.use(cors)
 // router.use('/user', user)
 router.use('/user', user)
+router.use(session({
+    secret: 'laoxie',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        // 设置cookie有效期
+        maxAge: 1000 * 60 * 60 * 2
+    }
+}))
+
 router.use('/comment', comment);
 router.use('/blog', blog);
 router.use('/asd', user);
@@ -48,6 +61,7 @@ router.get('/jwtverify', (req, res) => {
     }
 });
 
-
+// 图形验证码
+router.use('/vcode', vcode);
 
 module.exports = router

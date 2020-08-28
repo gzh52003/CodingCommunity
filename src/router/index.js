@@ -107,7 +107,7 @@ const router = new VueRouter({
   ]
 })
 
-//  校验token是否一致
+//  校验token是否一致,全局路由守卫
 router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
   // 重登陆删除本地数据
   if (to.path === '/login') {
@@ -122,7 +122,8 @@ router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登
   })
 
   // 登录验证：如果本地没有储存用户且不在登录页面则跳转
-  if (!res.data.code && to.path !== '/login') {
+
+  if (to.path !== '/login' && to.path !== '/reg' && !res.data.code) {
     next({
       path: '/login'
     })
@@ -130,6 +131,7 @@ router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登
     next()
   }
 })
+
 
 
 
