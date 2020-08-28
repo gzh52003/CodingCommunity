@@ -1,7 +1,8 @@
 const comment = require('./comment/comment')
+const session = require("express-session")
 const express = require('express')
 const token = require('./utils/token')
-
+const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
 const router = express.Router()
 const {
@@ -20,6 +21,15 @@ router.use(express.urlencoded({
 
 router.use(cors)
 // router.use('/user', user)
+router.use(session({
+    secret: 'laoxie',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        // 设置cookie有效期
+        maxAge: 1000 * 60 * 60 * 2
+    }
+}))
 
 router.use('/comment', comment);
 router.use('/asd', user);
@@ -47,6 +57,7 @@ router.get('/jwtverify', (req, res) => {
     }
 });
 
-
+// 图形验证码
+router.use('/vcode', vcode);
 
 module.exports = router

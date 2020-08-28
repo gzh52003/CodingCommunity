@@ -16,6 +16,15 @@
           <el-input v-model="formData.password" placeholder="请输入密码" type="password" prefix-icon="icon-login_pwd"
             clearable></el-input>
         </el-form-item>
+
+        <el-form-item prop="vcode" label="验证码">
+          <el-input placeholder="请输入验证码" v-model="formData.vcode">
+            <template v-slot:append>
+              <div v-html="vcodeSvg" class="code" @click="getVcode"></div>
+            </template>
+          </el-input>
+        </el-form-item>
+
         <el-alert title="用户名或密码错误，请重新输入" type="error" v-if="error" center show-icon>
         </el-alert>
 
@@ -41,8 +50,11 @@
         formData: {
           userName: "",
           password: "",
-          checked: "",
+          checked: true,
+          vcode: "",
+
         },
+        vcodeSvg: "",
         error: false,
         rules: {
           userName: [{
@@ -62,6 +74,11 @@
             message: "密码不能为空",
             trigger: "blur"
           }, ],
+          vcode: [{
+            required: true,
+            message: "验证码不能为空",
+            trigger: "blur"
+          }, ],
         },
       };
     },
@@ -73,7 +90,9 @@
               params: {
                 username: this.formData.userName,
                 password: this.formData.password,
-                checked: this.formData.checked
+                checked: this.formData.checked,
+                vcode: this.formData.vcode
+
               }
             })
             console.log(res)
@@ -102,7 +121,19 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+      async getVcode() {
+        const {
+          data
+        } = await this.$request.get('/vcode')
+        this.vcodeSvg = data.data.svg
+        // console.log(data.data.svg)
+        localStorage.setItem("svg", data.data.text);
+      }
+
     },
+    created() {
+      this.getVcode();
+    }
   };
 </script>
 
@@ -132,6 +163,18 @@
       margin: 0px auto;
       border: 1px solid #ccc;
       padding: 20px 50px 0 0;
+    }
+
+
+    .el-input-group__append .code {
+      height: 38px;
+      width: 70px;
+
+
+      svg {
+        height: 40px;
+        width: 70px;
+      }
     }
   }
 </style>

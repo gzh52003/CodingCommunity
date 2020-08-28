@@ -21,13 +21,13 @@ router.get('/', async (req, res) => {
 
     // 从会话中获取验证码
     // 校验验证码
-    // console.log('login.session=', req.session)
-    // if (vcode !== req.session.vcode) {
-    //     res.send(formatData({
-    //         code: 10
-    //     }))
-    //     return;
-    // }
+    console.log('login.session=', req.session)
+    if (vcode !== req.session.vcode) {
+        res.send(formatData({
+            code: 10
+        }))
+        return;
+    }
 
     // 加密后进行查询
     // const hash = crypto.createHash('md5');
