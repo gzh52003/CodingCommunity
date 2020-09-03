@@ -3,7 +3,7 @@ const {
     ObjectId
 } = require('mongodb');
 
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://175.24.126.30:27017';
 const dbname = 'community';
 
 async function connect() {
