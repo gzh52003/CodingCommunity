@@ -137,7 +137,7 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .login {
     h2 {
       text-align: center;
@@ -171,7 +171,7 @@
       width: 70px;
 
 
-      svg {
+      /deep/ svg {
         height: 40px;
         width: 70px;
       }

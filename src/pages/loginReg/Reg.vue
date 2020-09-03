@@ -133,7 +133,7 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .login {
     h2 {
       text-align: center;
