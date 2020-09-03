@@ -4,7 +4,10 @@ import Home from '@/views/Home.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+  const routes = [{
+    path: '/',
+    redirect: '/home'
+  },
   {
     path: '/home',
     name: 'Home',
@@ -13,17 +16,17 @@ Vue.use(VueRouter)
   {
     path: '/discover',
     name: 'discover',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Discover.vue')
+    component: () => import( '@/views/Discover.vue')
   },
   {
     path: '/cart',
     name: 'cart',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Cart.vue')
+    component: () => import( '@/views/Cart.vue')
   },
   {
     path: '/mine',
     name: 'mine',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Mine.vue')
+    component: () => import( '@/views/Mine.vue')
   }
 
 ]
