@@ -1,4 +1,4 @@
-const comment = require('./comment/comment')
+const goods = require('./goods/goods')
 const blog = require('./blog')
 const express = require('express')
 const cors = require('./filter/cors');
@@ -10,9 +10,6 @@ const {
 } = require('./utils/tools')
 const login = require('./huihui/login')
 const reg = require('./huihui/reg');
-const {
-    route
-} = require('./comment/comment');
 
 router.use(express.urlencoded({
     extended: false
@@ -21,7 +18,7 @@ router.use(express.urlencoded({
 router.use(cors)
 // router.use('/user', user)
 router.use('/user', user)
-router.use('/comment', comment);
+router.use('/goods', goods);
 router.use('/blog', blog);
 router.use('/asd', user);
 //注册登入

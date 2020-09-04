@@ -87,24 +87,24 @@ export default {
           ],
         },
         {
-          text: "文章管理",
-          path: "/blogs",
+          text: "商品管理",
+          path: "/goods",
           icon: "el-icon-grape",
         },
         {
-          text: "评论管理",
-          path: "/comments",
+          text: "订单管理",
+          path: "/order",
           icon: "el-icon-s-order",
         },
       ],
       currentIndex: 0,
     };
   },
-  computed: {
-    name() {
-      return JSON.parse(localStorage.getItem("token"))["username"];
-    },
-  },
+  // computed: {
+  //   name() {
+  //     return JSON.parse(localStorage.getItem("token"))["username"];
+  //   },
+  // },
   methods: {
     goto(path, idx) {
       console.log(this.$router);

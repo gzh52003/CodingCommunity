@@ -14,8 +14,8 @@ import UserEdit from '../pages/user/Edit.vue'
 import Blogs from '../pages/blogs/Default.vue'
 import BlogsHome from '../pages/blogs/Blogs.vue'
 
-import Comments from '../pages/comments/Default.vue'
-import CommentsHome from '../pages/comments/Comments.vue'
+// import Comments from '../pages/comments/Default.vue'
+// import CommentsHome from '../pages/comments/Comments.vue'
 
 import Reg from '../pages/loginReg/Reg.vue'
 import Login from '../pages/loginReg/Login.vue'
@@ -30,18 +30,18 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   // mode:'history', // 一般上线后改为history路由(需要额外配置服务器)
   routes: [{
-      path: '/',
-      redirect: '/login'
+      path: '',
+      redirect: '/public'
     },
     {
       path: '/public',
       component: Public,
       children: [{
           path: '/',
-          redirect: '/home'
+          redirect: 'home'
         },
         {
-          path: '/home',
+          path: 'home',
           component: Home
         },
         {
@@ -73,17 +73,27 @@ const router = new VueRouter({
             component: BlogsHome
           }]
         },
+        // {
+        //   path: '/comments',
+        //   component: Comments,
+        //   children: [{
+        //     path: '',
+        //     redirect: 'commentshome'
+        //   }, {
+        //     path: 'commentshome',
+        //     component: CommentsHome
+        //   }]
+        // },
         {
-          path: '/comments',
-          component: Comments,
-          children: [{
-            path: '',
-            redirect: 'commentshome'
-          }, {
-            path: 'commentshome',
-            component: CommentsHome
-          }]
+          path: '/goods',
+          name: 'goods',
+          component: () => import('../pages/goods/Goods.vue')
         },
+        {
+          path: '/order',
+          name: 'order',
+          component: () => import('../pages/order/Order.vue')
+        }
       ]
     },
     {
@@ -100,36 +110,36 @@ const router = new VueRouter({
       component: NotFound
     },
     // 404页面效果
-    {
-      path: '*',
-      redirect: '/404'
-    }
+    // {
+    //   path: '*',
+    //   redirect: '/404'
+    // }
   ]
 })
 
 //  校验token是否一致
-router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
-  // 重登陆删除本地数据
-  if (to.path === '/login') {
-    localStorage.removeItem('token')
-  }
-  let user = JSON.parse(localStorage.getItem('token'))
+// router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
+//   // 重登陆删除本地数据
+//   if (to.path === '/login') {
+//     localStorage.removeItem('token')
+//   }
+//   let user = JSON.parse(localStorage.getItem('token'))
 
-  let res = await axios.get('http://localhost:10000/api/jwtverify', {
-    params: {
-      authorization: user
-    }
-  })
+//   let res = await axios.get('http://localhost:10000/api/jwtverify', {
+//     params: {
+//       authorization: user
+//     }
+//   })
 
-  // 登录验证：如果本地没有储存用户且不在登录页面则跳转
-  if (!res.data.code && to.path !== '/login') {
-    next({
-      path: '/login'
-    })
-  } else {
-    next()
-  }
-})
+//   // 登录验证：如果本地没有储存用户且不在登录页面则跳转
+//   if (!res.data.code && to.path !== '/login') {
+//     next({
+//       path: '/login'
+//     })
+//   } else {
+//     next()
+//   }
+// })
 
 
 
