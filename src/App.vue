@@ -1,16 +1,25 @@
 <template>
   <div id="app">
-    <router-link to="/manage" id="nav">后台管理系统</router-link>
-    <router-view/>
+    <router-link to="/manage/" id="nav" >后台管理系统</router-link>
+    <!-- <router-view/> -->
+  <Index/>
+    
   </div>
 </template>
 <script>
+import Index from './pages/manage/Index.vue'
 export default {
   data() {
     return {
     }
   },
-  methods:{}
+  methods:{
+  
+    
+  },
+  components:{
+    Index
+  }
 }
 </script>
 
