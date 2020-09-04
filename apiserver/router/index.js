@@ -17,7 +17,14 @@ const reg = require('./huihui/reg');
 router.use(express.urlencoded({
     extended: false
 }), express.json())
-
+router.use(session({
+    secret:'coman',
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+        maxAge:1000*60*60*2
+    }
+}))
 router.use(cors)
 // router.use('/user', user)
 router.use('/user', user)

@@ -2,6 +2,39 @@ import Vue from 'vue';
 
 // 1. 引入Vue-Router
 import VueRouter from 'vue-router'
+<<<<<<< HEAD
+import UserList from '../pages/manage/UserList.vue'
+import Order from '../pages/manage/Order.vue'
+import Goods from '../pages/manage/Goods.vue'
+// import Home from '@/pages/webApp/Home.vue'
+// import Index1 from './Index1.vue'
+Vue.use(VueRouter)
+
+  const routes = [
+  {
+    path: '/userlist',
+    component: UserList
+  },
+  // {
+  //   path: '/index1',
+  //   component: Index1
+  // },
+  {
+    path: '/order',
+    component: Order
+  },
+  {
+    path: '/goods',
+    component: Goods
+  },
+  {
+    path: '/manage',
+    name: 'manage',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../pages/manage/Index.vue')
+=======
 import Public from '../Pub.vue'
 import axios from "axios"
 import Home from '../pages/Home.vue'
@@ -122,6 +155,7 @@ router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登
   // 重登陆删除本地数据
   if (to.path === '/login') {
     localStorage.removeItem('token')
+>>>>>>> 891abafd301b354cd65f331087123774a1593b2d
   }
   let user = JSON.parse(localStorage.getItem('token'))
 
