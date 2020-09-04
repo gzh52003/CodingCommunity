@@ -117,6 +117,7 @@ const router = new VueRouter({
   ]
 })
 
+<<<<<<< HEAD
 //  校验token是否一致
 // router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
 //   // 重登陆删除本地数据
@@ -140,6 +141,33 @@ const router = new VueRouter({
 //     next()
 //   }
 // })
+=======
+//  校验token是否一致,全局路由守卫
+router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
+  // 重登陆删除本地数据
+  if (to.path === '/login') {
+    localStorage.removeItem('token')
+  }
+  let user = JSON.parse(localStorage.getItem('token'))
+
+  let res = await axios.get('http://localhost:10000/api/jwtverify', {
+    params: {
+      authorization: user
+    }
+  })
+
+  // 登录验证：如果本地没有储存用户且不在登录页面则跳转
+
+  if (to.path !== '/login' && to.path !== '/reg' && !res.data.code) {
+    next({
+      path: '/login'
+    })
+  } else {
+    next()
+  }
+})
+>>>>>>> 32c830e2118cde273be7479114598deebf3135f8
+
 
 
 

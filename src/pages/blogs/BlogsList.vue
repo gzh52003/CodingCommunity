@@ -78,7 +78,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.blogs-list{
-    margin-top: 20px;
+.blogs-list {
+  margin-top: 20px;
 }
 </style>

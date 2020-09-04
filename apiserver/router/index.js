@@ -1,10 +1,13 @@
 const goods = require('./goods/goods')
 const blog = require('./blog')
 const express = require('express')
+const session = require("express-session")
+
+const token = require('./utils/token')
+const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
 const user = require('./userlist/user')
 const router = express.Router()
-const token = require('./utils/token')
 const {
     formatData
 } = require('./utils/tools')
@@ -45,6 +48,7 @@ router.get('/jwtverify', (req, res) => {
     }
 });
 
-
+// 图形验证码
+router.use('/vcode', vcode);
 
 module.exports = router

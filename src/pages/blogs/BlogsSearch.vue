@@ -60,34 +60,90 @@ export default {
     },
     loadAll() {
       return [
-        { value: "HTML" },
-        { value: "HTML5" },
-        { value: "CSS" },
-        { value: "CSS3" },
-        { value: "JavaScript" },
-        { value: "js" },
-        { value: "jQuery" },
-        { value: "node.js" },
-        { value: "ajax" },
-        { value: "gulp" },
-        { value: "PHP" },
-        { value: "git" },
-        { value: "express" },
-        { value: "scss" },
-        { value: "sass" },
-        { value: "MySQL" },
-        { value: "mongodb" },
-        { value: "svg" },
-        { value: "ElementUI" },
-        { value: "bootstrap" },
-        { value: "vue.js" },
-        { value: "vue-cli" },
-        { value: "vue-router" },
-        { value: "vuex" },
-        { value: "websocket" },
-        { value: "multer" },
-        { value: "eslint" },
-        { value: "babel" },
+        {
+          value: "HTML",
+        },
+        {
+          value: "HTML5",
+        },
+        {
+          value: "CSS",
+        },
+        {
+          value: "CSS3",
+        },
+        {
+          value: "JavaScript",
+        },
+        {
+          value: "js",
+        },
+        {
+          value: "jQuery",
+        },
+        {
+          value: "node.js",
+        },
+        {
+          value: "ajax",
+        },
+        {
+          value: "gulp",
+        },
+        {
+          value: "PHP",
+        },
+        {
+          value: "git",
+        },
+        {
+          value: "express",
+        },
+        {
+          value: "scss",
+        },
+        {
+          value: "sass",
+        },
+        {
+          value: "MySQL",
+        },
+        {
+          value: "mongodb",
+        },
+        {
+          value: "svg",
+        },
+        {
+          value: "ElementUI",
+        },
+        {
+          value: "bootstrap",
+        },
+        {
+          value: "vue.js",
+        },
+        {
+          value: "vue-cli",
+        },
+        {
+          value: "vue-router",
+        },
+        {
+          value: "vuex",
+        },
+        {
+          value: "websocket",
+        },
+        {
+          value: "multer",
+        },
+        {
+          value: "eslint",
+        },
+        {
+          value: "babel",
+        },
       ];
     },
     handleSelect(item) {
@@ -102,31 +158,38 @@ export default {
 <style lang="scss" scoped>
 .el-row {
   margin-bottom: 20px;
+
   &:last-child {
     margin-bottom: 0;
   }
 }
+
 .el-col {
   border-radius: 4px;
   line-height: 40px;
   text-align: center;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+
 .sub-title {
   display: inline-block;
   margin-right: 6px;
 }
-.el-col>.el-input {
-width: 70% ;
+
+.el-col > .el-input {
+  width: 70%;
 }
-.el-button{
+
+.el-button {
   float: left;
 }
 </style>
