@@ -1,6 +1,7 @@
 const express = require('express')
 const {PORT} = require('./config.json')
 const allRouter = require('./router')
+
 const app = express()
 
 // 获取商品路由

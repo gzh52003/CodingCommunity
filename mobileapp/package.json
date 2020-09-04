@@ -1,5 +1,5 @@
 {
-  "name": "conding-community",
+  "name": "mobileapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,16 +19,20 @@
     "multer": "^1.4.2",
     "request": "^2.88.2",
     "svg-captcha": "^1.4.0",
+    "vant": "^2.10.4",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vuex": "^3.4.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-import": "^1.13.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.12.0",
@@ -56,15 +60,7 @@
   ],
   "description": "```\r npm install\r ```",
   "main": "babel.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gzh52003/CodingCommunity.git"
-  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gzh52003/CodingCommunity/issues"
-  },
-  "homepage": "https://github.com/gzh52003/CodingCommunity#readme"
+  "license": "ISC"
 }

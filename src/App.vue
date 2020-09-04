@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div id="app">
     <router-link to="/manage/" id="nav" >后台管理系统</router-link>
     <!-- <router-view/> -->
@@ -21,27 +22,48 @@ export default {
     Index
   }
 }
+=======
+  <div>
+    <router-view />
+  </div>
+</template>
+<script>
+  export default {
+    name: "App",
+  };
+>>>>>>> 891abafd301b354cd65f331087123774a1593b2d
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<style lang="scss" scoped>
+  html {
+    height: 100%;
+  }
 
-#nav {
-  padding: 30px;
+  body {
+    margin: 0;
+    height: 100%;
+  }
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  .header {
+    line-height: 60px;
+    color: #fff;
+    background-color: rgba(84, 92, 100, 0.9);
 
-    &.router-link-exact-active {
-      color: #42b983;
+    .logo {
+      font-size: 24px;
+      color: #fc0;
+
+      i {
+        font-size: 40px;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
     }
   }
-}
+
+  .is-active {
+    i {
+      color: inherit !important;
+    }
+  }
 </style>
