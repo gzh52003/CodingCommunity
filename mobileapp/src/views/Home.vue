@@ -34,22 +34,34 @@
         <img src="@/assets/img/swipe.jpg" alt />
       </van-swipe-item>
     </van-swipe>
-    <a href="">
-        <span></span>
-        <span></span>
-        <span></span>
-    </a>
+    <van-notice-bar mode="link">
+      <div class="notice-bar">
+        <span>
+          <van-icon name="passed" />100%严选正品
+        </span>
+        <span>
+          <van-icon name="passed" />全程质检严选
+        </span>
+        <span>
+          <van-icon name="passed" />售后服务无忧
+        </span>
+      </div>
+    </van-notice-bar>
+    <home-goods-list/>
     <div class="long"></div>
   </div>
 </template>
 <script>
 import Vue from "vue";
-import { Swipe, SwipeItem, Sticky, Search, Icon } from "vant";
+import { Swipe, SwipeItem, Sticky, Search, Icon, NoticeBar } from "vant";
 Vue.use(Sticky);
 Vue.use(Swipe);
 Vue.use(SwipeItem);
 Vue.use(Search);
 Vue.use(Icon);
+Vue.use(NoticeBar);
+
+import HomeGoodsList from "../components/HomeGoodsList"
 
 export default {
   data() {
@@ -58,30 +70,39 @@ export default {
         topbarClass: "topbar trans",
       },
       searchValue: "",
-      throttling: null,
     };
   },
   methods: {
-    scrollHandle: function (e) {
-      //节流处理
-      if (this.throttling !== null) {
-        return;
-      }
-      this.throttling = setTimeout(() => {
-        var top = e.srcElement.scrollingElement.scrollTop; // 获取页面滚动高度
-        console.log(top);
-        if (top < 50) {
-          this.topbarUI.topbarClass = "topbar trans";
-        } else {
-          this.topbarUI.topbarClass = "topbar white";
+    scrollHandle(e) {
+      //调用闭包+节流处理
+      this.scrolThrottling()(e);
+    },
+    scrolThrottling() {
+      //声明闭包+节流处理
+      let throttling = null;
+      let topbarUI = this.topbarUI;
+      return (e) => {
+        if (throttling !== null) {
+          return;
         }
-        this.throttling = null;
-      }, 500);
+        throttling = setTimeout(() => {
+          let top = e.srcElement.scrollingElement.scrollTop; // 获取页面滚动高度
+          if (top < 50) {
+            topbarUI.topbarClass = "topbar trans";
+          } else {
+            topbarUI.topbarClass = "topbar white";
+          }
+          throttling = null;
+        }, 500);
+      };
     },
   },
   mounted() {
     window.addEventListener("scroll", this.scrollHandle); // 绑定页面的滚动事件
   },
+  components:{
+    HomeGoodsList
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -131,7 +152,6 @@ export default {
   color: #333;
 }
 .my-swipe {
-
   width: 92%;
   height: 155px;
   margin: 0 auto;
@@ -147,6 +167,19 @@ export default {
     width: 100%;
   }
 }
+
+.van-notice-bar{
+  height: 20px;
+  margin-bottom: 10px;
+}
+.notice-bar {
+  width: 350px;
+  //height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .long {
   height: 2000px;
   background: linear-gradient(to bottom, red, blue);
