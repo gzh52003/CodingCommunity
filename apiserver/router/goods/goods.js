@@ -13,6 +13,9 @@ const {
 const express = require('express');
 
 const router = express.Router();
+/* 
+    1.
+*/
 // 获取全部商品
 router.get('/', async (req, res) => {
     let {
@@ -47,5 +50,20 @@ router.delete('/:id', async (req, res) => {
         res.send(Enum(1002))
     }
 })
+// 查找某种类别的商品
 
+router.get('/classify/:tag', async (req, res) => {
+    const {
+        tag
+    } = req.params;
+    try {
+        const result = await find('goods', {
+            tag
+        });
+        res.send(Enum(1001, result))
+    } catch (err) {
+        res.send(Enum(1002))
+    }
+
+})
 module.exports = router

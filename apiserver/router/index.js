@@ -7,6 +7,7 @@ const token = require('./utils/token')
 const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
 const user = require('./userlist/user')
+const Sms = require('./huihui/sendSms')
 const router = express.Router()
 const {
     formatData
@@ -18,11 +19,11 @@ router.use(express.urlencoded({
     extended: false
 }), express.json())
 router.use(session({
-    secret:'coman',
-    resave:false,
-    saveUninitialized:true,
-    cookie:{
-        maxAge:1000*60*60*2
+    secret: 'coman',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 2
     }
 }))
 router.use(cors)
@@ -54,7 +55,8 @@ router.get('/jwtverify', (req, res) => {
         }))
     }
 });
-
+// 短信验证码
+router.use('/sendSms', Sms);
 // 图形验证码
 router.use('/vcode', vcode);
 

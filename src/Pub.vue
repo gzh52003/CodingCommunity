@@ -58,6 +58,7 @@
     </el-container>
   </el-container>
 </template>
+
 <script>
 export default {
   name: "Public",
@@ -105,6 +106,7 @@ export default {
   //     return JSON.parse(localStorage.getItem("token"))["username"];
   //   },
   // },
+
   methods: {
     goto(path, idx) {
       console.log(this.$router);
@@ -112,26 +114,19 @@ export default {
       // this.$router.replace(path);
       this.currentIndex = idx;
     },
-    methods: {
-      goto(path, idx) {
-        console.log(this.$router);
-        this.$router.push(path);
-        // this.$router.replace(path);
-        this.currentIndex = idx;
-      },
-      back() {
-        this.$router.back();
-      },
-      changeMenu(path) {
-        this.activeIndex = path;
-      },
-      loginOut() {
-        localStorage.removeItem("token");
-        this.$router.push("/login");
-      },
+    back() {
+      this.$router.back();
     },
-    components: {},
-  };
+    changeMenu(path) {
+      this.activeIndex = path;
+    },
+    loginOut() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
+  },
+  components: {},
+};
 </script>
 
 
