@@ -1,5 +1,7 @@
 <template>
   <div class="login">
+    <h1>欢迎来到金丰娱乐~</h1>
+    <h2>登录发现惊喜！</h2>
     <van-image round width="10rem" height="10rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
     <van-form @submit="onSubmit">
       <van-field
@@ -7,7 +9,7 @@
         name="username"
         label="用户名"
         placeholder="用户名"
-        :rules="[{ required: true, message: '请填写用户名' }]"
+        :rules="[{ required: true, message: tips }]"
       />
       <van-field
         v-model="password"
@@ -15,7 +17,7 @@
         name="password"
         label="密码"
         placeholder="密码"
-        :rules="[{ required: true, message: '请填写密码' }]"
+        :rules="[{ required: true, message: tips }]"
       />
       <van-field
         v-model="vcode"
@@ -23,21 +25,24 @@
         name="vcode"
         label="验证码"
         placeholder="验证码"
-        :rules="[{ required: true, message: '请填写验证码' }]"
-      >
-     
-      </van-field>
-   <div v-html="vcodeSvg" class="vcode" @click="getVcode"></div>
+        :rules="[{ required: true, message: tips }]"
+      ></van-field>
+      <div v-html="vcodeSvg" class="vcode" @click="getVcode"></div>
       <!-- 7天免登陆 -->
       <van-field name="mdl" label="7天免登陆">
         <template #input>
           <van-switch v-model="switchChecked" size="20" />
         </template>
       </van-field>
-      <van-button type="primary" size="small" plain to="/reg">免费注册</van-button>
+
       <!-- 提交按钮 -->
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">登录</van-button>
+      </div>
+
+    <!-- 免费注册 -->
+      <div style="margin: 16px;">
+        <van-button type="primary" round block  to="/reg">免费注册</van-button>
       </div>
     </van-form>
   </div>
@@ -45,7 +50,7 @@
 
 <script>
 import Vue from "vue";
-import { Form, Field, Button, Switch, Image as VanImage } from "vant";
+import { Form, Field, Button, Switch, Image as VanImage, Dialog } from "vant";
 Vue.use(VanImage);
 Vue.use(Form);
 Vue.use(Field);
@@ -54,6 +59,7 @@ Vue.use(Switch);
 export default {
   data() {
     return {
+      tips: "请输入正确的格式",
       username: "",
       password: "",
       vcode: "",
@@ -67,20 +73,35 @@ export default {
   methods: {
     async getVcode() {
       let { data } = await this.$request.get("/vcode");
-      this.vcodeSvg = data.data.svg
-    
+      this.vcodeSvg = data.data.svg;
     },
     //点击后发起请求
     async onSubmit(values) {
       console.log("submit", values);
       const { data } = await this.$request.get("/login", {
-           params:{
-               ...values
-           },
+        params: {
+          ...values,
+        },
       });
       console.log(data.code);
-      if(data.code === 1){
-          this.$router.push('/mine')
+      if (data.code === 1) {
+        //设置localStorage
+        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        Dialog.alert({
+          message: "登录成功！",
+          theme: "round-button",
+        }).then(() => {
+          this.$router.replace("/mine");
+        });
+      } else{
+        Dialog.alert({
+          message: "用户名或密码错误，请重新输入",
+          theme: "round-button",
+        }).then(() => {
+          this.username = "";
+          this.password = "";
+          this.vcode = "";
+        });
       }
     },
   },
@@ -88,10 +109,10 @@ export default {
 </script>
 
 <style lang='scss'>
-.vcode{
-    display: inline-block;
-    // position: absolute;
-    transform: translate(217px,-50px);
-    position: absolute;
+.vcode {
+  display: inline-block;
+  // position: absolute;
+  transform: translate(217px, -50px);
+  position: absolute;
 }
 </style>

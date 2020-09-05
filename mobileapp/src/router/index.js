@@ -32,8 +32,22 @@ const routes = [{
     path: 'detail/:id',
     name: 'detail',
     component: () => import('@/views/Detail.vue')
-  }
-
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue')
+  },
+  {
+    path: '/reg',
+    name: 'Reg',
+    component: () => import('@/views/Reg.vue')
+  },
+  {
+    path: '/more',
+    name: 'More',
+    component: () => import('@/views/More.vue')
+  },
 ]
 
 const router = new VueRouter({
