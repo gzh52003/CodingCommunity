@@ -1,5 +1,7 @@
 <template>
   <div class="login">
+    <h1>欢迎来到金丰娱乐~</h1>
+    <h2>登录发现惊喜！</h2>
     <van-image round width="10rem" height="10rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
     <van-form @submit="onSubmit">
       <van-field
@@ -32,10 +34,15 @@
           <van-switch v-model="switchChecked" size="20" />
         </template>
       </van-field>
-      <van-button type="primary" size="small" plain to="/reg">免费注册</van-button>
+
       <!-- 提交按钮 -->
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">登录</van-button>
+      </div>
+
+    <!-- 免费注册 -->
+      <div style="margin: 16px;">
+        <van-button type="primary" round block  to="/reg">免费注册</van-button>
       </div>
     </van-form>
   </div>
@@ -52,7 +59,7 @@ Vue.use(Switch);
 export default {
   data() {
     return {
-      tips: "哈哈哈哈",
+      tips: "请输入正确的格式",
       username: "",
       password: "",
       vcode: "",
@@ -78,15 +85,22 @@ export default {
       });
       console.log(data.code);
       if (data.code === 1) {
-        this.$router.push("/mine");
-      } else if (data.code === 10) {
+        //设置localStorage
+        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        Dialog.alert({
+          message: "登录成功！",
+          theme: "round-button",
+        }).then(() => {
+          this.$router.replace("/mine");
+        });
+      } else{
         Dialog.alert({
           message: "用户名或密码错误，请重新输入",
           theme: "round-button",
         }).then(() => {
-          this.username = ''
-          this.password = ''
-          this.vcode = ''
+          this.username = "";
+          this.password = "";
+          this.vcode = "";
         });
       }
     },
