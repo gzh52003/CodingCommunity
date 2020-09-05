@@ -18,11 +18,10 @@ router.get('/', async (req, res) => {
       fontSize: 50,
       height: 54
    }
-
    // 验证码在这里生成
    const captcha = svgCaptcha.create(options); // {data:'<svg/>',text:'abcd'}
 
-
+console.log('captcha',captcha);
 
    // 把验证码存入会话Session
    req.session.vcode = captcha.text.toLowerCase();

@@ -1,4 +1,28 @@
 <template>
+<<<<<<< HEAD
+  <div id="app">
+    <router-link to="/manage/" id="nav" >后台管理系统</router-link>
+    <!-- <router-view/> -->
+  <Index/>
+    
+  </div>
+</template>
+<script>
+import Index from './pages/manage/Index.vue'
+export default {
+  data() {
+    return {
+    }
+  },
+  methods:{
+  
+    
+  },
+  components:{
+    Index
+  }
+}
+=======
   <div>
     <router-view />
   </div>
@@ -7,6 +31,7 @@
   export default {
     name: "App",
   };
+>>>>>>> 891abafd301b354cd65f331087123774a1593b2d
 </script>
 
 <style lang="scss" scoped>

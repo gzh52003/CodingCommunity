@@ -1,10 +1,20 @@
 <template>
-    <div>
-        404
-    </div>
+<div>
+ 
+   <h1>goods</h1>
+   
+</div>
+ 
 </template>
+
+
 <script>
+
 export default {
-    
+
 }
 </script>
+
+<style>
+
+</style>
