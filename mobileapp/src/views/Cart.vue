@@ -3,8 +3,9 @@
         <!-- 头部 -->
         <van-sticky>
             <h1>购物车 </h1>
-            <p @click="change">编辑
-                <span v-show="changesuccess">完成</span>
+            <p @click="change">
+                <span v-if="changesuccess">完成</span>
+                <span v-else>编辑</span>
                 <van-icon name="chat-o" />
             </p>
         </van-sticky>
@@ -23,14 +24,18 @@
                     <van-stepper v-model="item.num" input-width="20px" button-size="20px" />
                 </p>
             </template>
-
         </van-card>
 
-        <!-- 提交订单 -->
 
+        <!-- 结算订单 -->
+        <template v-if="changesuccess">
+            <van-submit-bar :price="totalPrice" button-text="删 除" @submit="removeItem">
+                <van-checkbox v-model="check">全选</van-checkbox>
+            </van-submit-bar>
+        </template>
 
-        <template>
-            <van-submit-bar :price="totalPrice" button-text="提交订单" @submit="onSubmit">
+        <template v-else>
+            <van-submit-bar :price="totalPrice" button-text="结 算" @submit="onSubmit">
                 <van-checkbox v-model="check">全选</van-checkbox>
                 <template #tip>
                     你的收货地址不支持同城送, <span>修改地址</span>
@@ -71,57 +76,26 @@
         data() {
             return {
                 changesuccess: false,
-                goodslist: [{
-                        "_id": "5f50a77879a637ba8e5abe70",
-                        "goodsid": "192441894",
-                        "pricecurrent": "59.9",
-                        "priceold": "198",
-                        "title": "显龄背带牛仔裤显瘦",
-                        "imgurl": "./img/1.jpg",
-                        "sold": "剩1天",
-                        "num": 3,
-                        "checked": false
-                    },
-                    {
-                        "_id": "5f50a77879a637ba8e5abe73",
-                        "goodsid": "182441891",
-                        "pricecurrent": "49.9",
-                        "priceold": "189",
-                        "title": "开叉泫雅风牛仔拖地裤",
-                        "imgurl": "./img/2.jpg",
-                        "sold": "剩1天",
-                        "num": 1,
-                        "checked": false
-                    },
-                    {
-                        "_id": "5f50a77879a637ba8e5abe76",
-                        "goodsid": "102440796",
-                        "pricecurrent": "49.9",
-                        "priceold": "2190",
-                        "title": "网红短裤显高牛仔外套",
-                        "imgurl": "./img/0.jpg",
-                        "sold": "剩1天",
-                        "num": 2,
-                        "checked": false
-                    }
-                ]
             }
         },
         computed: {
+            goodslist() {
+                return this.$store.state.cart.goodslist
 
+            },
             check: {
                 get() {
                     return this.goodslist.every(item => item.checked)
                 },
                 set(val) {
-                    this.goodslist = this.goodslist.map(item => {
-                        item.checked = val;
-                        return item;
-                    })
+                    this.$store.commit("allcheck", val)
                 }
+
             },
+
             totalPrice() {
-                return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
+                // return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
+                return this.$store.getters.totalPrice
             },
 
         },
@@ -131,8 +105,7 @@
             },
             change() {
 
-                this.changesuccess = true;
-
+                this.changesuccess = !this.changesuccess;
                 console.log(111)
             },
             gotoDetail(e, id) {
@@ -140,11 +113,23 @@
                     this.$router.push('/goods/' + id);
                 }
             },
+            removeItem() {
+                console.log(4567864123);
+                this.$store.commit('remove')
+            },
+            onSubmit() {
+                this.$router.push('./summary')
+            }
+
         },
-        mounted() {
-            console.log(this.$router);
+        created() {
+            this.$store.commit('displayTabbar', false);
+        },
+
+        beforeDestroy() {
+            this.$store.commit('displayTabbar', true);
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -186,6 +171,17 @@
         left: 30px;
         top: 34px;
         font-size: 16px;
+    }
 
+    .clearCart {
+        padding: 10px;
+        display: flex;
+        justify-content: flex-end;
+        // text-align: right;
+    }
+
+    .van-submit-bar__button {
+        font-weight: 600;
+        font-size: 18px;
     }
 </style>
