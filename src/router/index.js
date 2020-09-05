@@ -73,21 +73,21 @@ const router = new VueRouter({
             component: BlogsHome
           }]
         },
-        // {
-        //   path: '/comments',
-        //   component: Comments,
-        //   children: [{
-        //     path: '',
-        //     redirect: 'commentshome'
-        //   }, {
-        //     path: 'commentshome',
-        //     component: CommentsHome
-        //   }]
-        // },
         {
           path: '/goods',
-          name: 'goods',
-          component: () => import('../pages/goods/Goods.vue')
+          component: () => import('../pages/goods/Default.vue'),
+
+          children: [{
+            redirect: 'list',
+            path: ''
+          }, {
+            path: 'edit/:id',
+            component: () => import('../pages/goods/Edit.vue')
+          }, {
+            name: 'list',
+            path: 'list',
+            component: () => import('../pages/goods/Goods.vue'),
+          }]
         },
         {
           path: '/order',
@@ -118,29 +118,29 @@ const router = new VueRouter({
 })
 
 //  校验token是否一致,全局路由守卫
-router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
-  // 重登陆删除本地数据
-  if (to.path === '/login') {
-    localStorage.removeItem('token')
-  }
-  let user = JSON.parse(localStorage.getItem('token'))
+// router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
+//   // 重登陆删除本地数据
+//   if (to.path === '/login') {
+//     localStorage.removeItem('token')
+//   }
+//   let user = JSON.parse(localStorage.getItem('token'))
 
-  let res = await axios.get('http://localhost:10000/api/jwtverify', {
-    params: {
-      authorization: user
-    }
-  })
+//   let res = await axios.get('http://localhost:10000/api/jwtverify', {
+//     params: {
+//       authorization: user
+//     }
+//   })
 
-  // 登录验证：如果本地没有储存用户且不在登录页面则跳转
+//   // 登录验证：如果本地没有储存用户且不在登录页面则跳转
 
-  if (to.path !== '/login' && to.path !== '/reg' && !res.data.code) {
-    next({
-      path: '/login'
-    })
-  } else {
-    next()
-  }
-})
+//   if (to.path !== '/login' && to.path !== '/reg' && !res.data.code) {
+//     next({
+//       path: '/login'
+//     })
+//   } else {
+//     next()
+//   }
+// })
 
 
 

@@ -27,6 +27,14 @@
       <el-table-column prop="options" label="操作">
         <template v-slot:default="scope">
           <el-button
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            size="small"
+            @click="edit(scope.row._id)"
+            title="修改"
+          ></el-button>
+          <el-button
             type="danger"
             icon="el-icon-delete"
             circle
@@ -171,6 +179,9 @@ export default {
           });
         }
       });
+    },
+    edit(id) {
+      this.$router.push("/goods/edit/" + id);
     },
     handleSelectionChange(val) {
       if (val.length !== 0) {
