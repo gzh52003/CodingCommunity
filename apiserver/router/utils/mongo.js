@@ -3,7 +3,7 @@ const {
     ObjectId
 } = require('mongodb');
 
-const url = 'mongodb://175.24.126.30:27017';
+const url = 'mongodb://localhost:27017';
 const dbname = 'community';
 
 async function connect() {
@@ -36,7 +36,6 @@ async function find(colName, query, options) {
             $eq: options.status * 1
         }
     }
-    console.log(query);
     const opt = {};
     if (options.field) {
         opt.projection = options.field;

@@ -4,7 +4,7 @@ import Home from '@/views/Home.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [{
+const routes = [{
     path: '/',
     redirect: '/home'
   },
@@ -14,19 +14,24 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/discover',
-    name: 'discover',
-    component: () => import( '@/views/Discover.vue')
+    path: '/classification',
+    name: 'classification',
+    component: () => import('@/views/Classification.vue')
   },
   {
     path: '/cart',
     name: 'cart',
-    component: () => import( '@/views/Cart.vue')
+    component: () => import('@/views/Cart.vue')
   },
   {
     path: '/mine',
     name: 'mine',
-    component: () => import( '@/views/Mine.vue')
+    component: () => import('@/views/Mine.vue')
+  },
+  {
+    path: 'detail/:id',
+    name: 'detail',
+    component: () => import('@/views/Detail.vue')
   }
 
 ]

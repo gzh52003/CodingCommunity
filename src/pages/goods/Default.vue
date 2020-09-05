@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>评论管理</h2>
+    商品管理
     <router-view />
   </div>
 </template>

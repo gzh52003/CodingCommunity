@@ -21,14 +21,15 @@ router.get('/', async (req, res) => {
 
     // 从会话中获取验证码
     // 校验验证码
-    console.log('login.session=', req.session)
+    // console.log('login.session=', req.session)
+    console.log(vcode,req.session.vcode)
     if (vcode !== req.session.vcode) {
         res.send(formatData({
             code: 10
         }))
         return;
     }
-
+    console.log(6666)
     // 加密后进行查询
     // const hash = crypto.createHash('md5');
     // hash.update(password + 'laoxie'); // 加盐 盐值
@@ -36,7 +37,7 @@ router.get('/', async (req, res) => {
 
     password = md5(password)
 
-    let result = await mongo.find('juejin', {
+    let result = await mongo.find('user', {
         username,
         password
     }); //[{}]
