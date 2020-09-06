@@ -4,7 +4,7 @@ const {
 } = require('mongodb');
 
 const url = 'mongodb://localhost:27017';
-const dbname = 'community';
+const dbname = 'shop';
 
 async function connect() {
     const client = await MongoClient.connect(url, {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    用户管理
+    商品添加
     <router-view />
   </div>
 </template>

@@ -1,15 +1,13 @@
 <template>
   <div>
-    <h1>商品编辑</h1>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px">
       <el-form-item label="商品名" prop="three_subtit">
-        <el-input type="text" v-bind:value="ruleForm.three_subtit"></el-input>
+        <el-input type="text" v-model="ruleForm.three_subtit"></el-input>
       </el-form-item>
-
       <el-form-item label="价格" prop="price">
-        <el-input type="text" v-model="ruleForm.price" autocomplete="off"></el-input>
+        <el-input type="text" v-model.number="ruleForm.price" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="标签" prop="tag">
+      <el-form-item label="分类" prop="tag">
         <el-select v-model="value" placeholder="请选择" @change="selected">
           <el-option
             v-for="item in options"
@@ -20,9 +18,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="库存" prop="rest">
-        <el-input type="text" v-model="ruleForm.rest" autocomplete="off"></el-input>
+        <el-input type="text" v-model.number="ruleForm.rest" autocomplete="off"></el-input>
       </el-form-item>
-
+      <el-form-item label="商品图片" prop="imgUrl"></el-form-item>
       <el-form-item>
         <el-button type="success" @click="submitForm">修改</el-button>
       </el-form-item>
@@ -33,19 +31,25 @@
 export default {
   data() {
     return {
+      goodsId: "",
       value: "",
-      options: [],
-      circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      options: [
+        { value: "foods", label: "美食" },
+        { value: "living", label: "家居" },
+        { value: "cook", label: "厨具" },
+        { value: "clothes", label: "服装" },
+        { value: "beauty", label: "护肤" },
+      ],
       ruleForm: {
-        avatar_large: "",
-        company: "",
-        description: "",
-        job_title: "",
-        user_name: "",
+        three_subtit: "",
+        price: "",
+        rest: "",
+        tag: "",
+        imgUrl:
+          "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
       },
       rules: {
-        company: [
+        three_subtit: [
           {
             min: 1,
             max: 15,
@@ -53,18 +57,19 @@ export default {
             trigger: "blur",
           },
         ],
-        description: [
+        rest: [
+          { required: true, message: "请输入库存", trigger: "blur" },
           {
-            max: 60,
-            message: "允许输入最多60个字符",
+            type: "number",
+            message: "必须输入数字",
             trigger: "blur",
           },
         ],
-        job_title: [
+        price: [
+          { required: true, message: "请输入价格", trigger: "blur" },
           {
-            min: 2,
-            max: 12,
-            message: "请 2 到 12 个字符",
+            type: "number",
+            message: "必须输入数字",
             trigger: "blur",
           },
         ],
@@ -72,21 +77,52 @@ export default {
     };
   },
   methods: {
+    async selected() {
+      this.ruleForm.tag = this.value;
+    },
+    classification(item) {
+      switch (item.tag) {
+        case "foods":
+          item.tag = "美食";
+          break;
+        case "living":
+          item.tag = "家居";
+          break;
+        case "cook":
+          item.tag = "厨具";
+          break;
+        case "clothes":
+          item.tag = "服装";
+          break;
+        case "beauty":
+          item.tag = "护肤";
+          break;
+      }
+      return item;
+    },
     submitForm() {
       this.$refs["ruleForm"].validate(async (valid) => {
-        console.log(13, valid);
         // valid为校验结果，全部校验通过是值为true,否则为false
         if (valid) {
-          const { userid, ruleForm } = this;
-          const { data } = await this.$request.put("/user/" + userid, {
-            ...ruleForm,
-          });
+          const { goodsId, ruleForm } = this;
+          let data;
+          if (goodsId) {
+            data = await this.$request.put("/goods/" + goodsId, {
+              ...ruleForm,
+            });
+            data = data.data;
+          } else {
+            data = await this.$request.post("/goods/add", {
+              ...ruleForm,
+            });
+            data = data.data;
+          }
           if (data.code === 1001) {
             this.$message({
               type: "success",
               message: "修改成功",
             });
-            this.$router.push("../");
+            this.$router.push("/goods/list");
           }
         } else {
           console.log("error submit!!");
@@ -95,22 +131,28 @@ export default {
       });
     },
   },
+  watch: {
+    "$route.path"(newVal) {
+      if (newVal === "/goods/add") {
+        this.ruleForm = {
+          three_subtit: "",
+          price: "",
+          rest: "",
+          tag: "",
+        };
+        this.goodsId = "";
+        this.value = "";
+      }
+    },
+  },
   async created() {
-    // console.log("Router=", this.$router);
-    console.log("Route=", this.$route);
-    //const {a,b} = this.$route.query;
     const { id } = this.$route.params;
-    const { data } = await this.$request.get("/user/" + id);
-
-    const userdata = data.data[0]; //{一个对象}
-    console.log(userdata);
-    this.userid = id;
-    console.log(this.userid);
-    // const o = {avatar_large:111}
-    //this.ruleForm是目标对象，把userdata这个对象整合到this.ruleForm里
-    Object.assign(this.ruleForm, userdata);
-
-    console.log(this.ruleForm);
+    this.goodsId = id;
+    const result = await this.$request.get("/goods/" + id);
+    const { data } = result.data;
+    const goodsData = this.classification(data[0]);
+    Object.assign(this.ruleForm, goodsData);
+    this.value = this.ruleForm.tag;
   },
 };
 </script>
