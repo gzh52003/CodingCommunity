@@ -22,15 +22,18 @@ const router = express.Router();
 // 上传订单
 /* 
  params:
- 1.goodsList    商品数组，里面放置商品id，
+ 1.goodsList    商品数组，里面放置商品id，以及对应的数量
  2.userId   用户id,
  3.createTime 下单时间
+ 4.total
+ 5.
 */
 // 提交订单
 router.post('/', async (req, res) => {
     const {
         goodsList,
-        userId
+        userId,
+        total,
     } = req.body;
     const status = 0;
     // 获取下单时间戳
@@ -40,6 +43,7 @@ router.post('/', async (req, res) => {
             goodsList,
             userId,
             status,
+            total,
             createTime
         });
         res.send(Enum(1001))
@@ -91,30 +95,31 @@ router.get('/', async (req, res) => {
         pageSize,
         pageNo,
     } = req.query;
-
     const skip = (pageNo - 1) * pageSize;
     try {
         let result = await find("order", {}, {
             pagesize: pageSize * 1,
             skip: skip
         });
-        result = result.map(async (item) => {
-            const arr = await find('userlist', {
-                _id: item.userId
-            });
-            item.userId = arr[0].userName;
-            console.log(item.goodsList);
-            item.goodsList = item.goodsList.split(',');
-            item.goodsList = item.goodsList.map(async (goodsId) => {
-                let goodsName = await find('goods', {
-                    _id: goodsId
-                });
-                console.log(goodsName);
-                return goodsName
-            })
-            console.log(item);
-            return item
-        })
+
+        // result = result.map(async (item) => {
+        //     const user = await find('userlist', {
+        //         _id: item.userId
+        //     });
+        //     item.userId = 
+        //     // 获取用户名
+        //     item.userId = user[0].userName;
+        //     item.goodsList = item.goodsList.split(',');
+        //     item.goodsList = item.goodsList.map(async (goodsId) => {
+        //         let goods = await find('goods', {
+        //             _id: goodsId
+        //         });
+        //         console.log('goodName', goods);
+        //         return goods[0]
+        //     })
+        //     console.log('item', item);
+        //     return item
+        // })
         res.send(Enum(1001, result));
     } catch (e) {
         res.send(Enum(1002));

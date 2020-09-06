@@ -101,7 +101,16 @@ const router = new VueRouter({
         {
           path: '/order',
           name: 'order',
-          component: () => import('../pages/order/Order.vue')
+          component: () => import('../pages/order/Order.vue'),
+          children: [{
+              path: '',
+              redirect: 'list'
+            },
+            {
+              path: 'list',
+              component: () => import('../pages/order/List.vue')
+            }
+          ]
         }
       ]
     },

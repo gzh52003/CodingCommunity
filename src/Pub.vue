@@ -106,6 +106,12 @@ export default {
           text: "订单管理",
           path: "/order",
           icon: "el-icon-s-order",
+          submenu: [
+            {
+              text: "订单列表",
+              path: "/list",
+            },
+          ],
         },
       ],
       currentIndex: 0,
