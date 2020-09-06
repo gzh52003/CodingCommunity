@@ -2,7 +2,11 @@
     <div>
         <!-- 头部 -->
         <van-sticky>
-            <h1>购物车 </h1>
+           <p @click="goback">
+               <van-icon name="arrow-left" />
+               <span>返回</span>
+            </p>
+            <h2>购物车 </h2>
             <p @click="change">
                 <span v-if="changesuccess">完成</span>
                 <span v-else>编辑</span>
@@ -81,7 +85,6 @@
         computed: {
             goodslist() {
                 return this.$store.state.cart.goodslist
-
             },
             check: {
                 get() {
@@ -100,6 +103,9 @@
 
         },
         methods: {
+            goback(){
+                this.$router.back();
+            },
             onSubmit() {
 
             },
@@ -142,12 +148,13 @@
         padding: 0 15px;
         color: #fff;
 
-        h1 {
+        h2 {
             font-size: 20px;
         }
-
         p {
             font-size: 16px;
+            line-height: 18px;
+            vertical-align: middle;
         }
     }
 

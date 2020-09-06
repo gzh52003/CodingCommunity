@@ -61,7 +61,7 @@
     },
     computed: {
       cartLength() {
-        return 0;
+        return this.$store.state.cart.goodslist.length;
       },
       showTabbar() {
         return this.$store.state.common.showTabbar;
