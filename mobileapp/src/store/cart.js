@@ -1,9 +1,3 @@
-import request from '../utils/request'
-import {
-    Dialog
-} from 'vant'
-
-
 
 const cart = {
     state: {
@@ -55,9 +49,7 @@ const cart = {
         // 删除商品
         remove(state) {
             state.goodslist = state.goodslist.filter(item => !item.checked)
-            Dialog({
-                message: '确定删除该商品吗？'
-            });
+
         },
         
         //  全选
