@@ -100,6 +100,9 @@ export default {
       this.$router.replace('/classification')
     }
   },
+  async created(){
+    let res = await this.$request.get("/goods")
+  },
   mounted() {
     window.addEventListener("scroll", this.scrollHandle); // 绑定页面的滚动事件
   },

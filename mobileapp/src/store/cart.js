@@ -59,6 +59,7 @@ const cart = {
                 message: '确定删除该商品吗？'
             });
         },
+        
         //  全选
         allcheck(state, check) {
             state.goodslist.forEach(item => {

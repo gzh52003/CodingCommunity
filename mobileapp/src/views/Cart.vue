@@ -104,7 +104,7 @@
         },
         methods: {
             goback(){
-                this.$router.back();
+                this.$router.push('/home/');
             },
             onSubmit() {
 

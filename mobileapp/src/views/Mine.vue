@@ -114,7 +114,6 @@ html {
   // background-image: linear-gradient(to right, #fd9126, #ff5000);
   background: #fff;
   .showMe {
-    
     h2 {
       display: inline-block;
       transform: translate(11px, -38px);

@@ -1,13 +1,13 @@
 <template>
   <div>
     <NavBar :title="title"></NavBar>
-    <van-image :src="tmpdata.imgUrl" @click="showBig"></van-image>
+    <van-image :src="goodsData.imgUrl" @click="showBig"></van-image>
     <div class="goods-info">
-      <h1>{{tmpdata.three_subtit}}</h1>
-      <van-tag plain type="primary">{{tmpdata.tag}}</van-tag>
+      <h1>{{goodsData.three_subtit}}</h1>
+      <van-tag plain type="primary">{{goodsData.tag}}</van-tag>
       <p class="price">
-        <del>{{tmpdata.price}}</del>
-        <span>{{tmpdata.price}}</span>
+        <del>{{goodsData.price}}</del>
+        <span>{{goodsData.price}}</span>
       </p>
     </div>
 
@@ -38,16 +38,16 @@ export default {
   name: "Goods",
   data() {
     return {
-      recommend: [],
+      goodsData: {},
       title: "商品详情",
     };
   },
   computed: {
-    tmpdata() {
-      return this.$store.state.tmplist.datalist.filter((item) => {
-        return this.$route.params.id == item._id;
-      })[0];
-    },
+    // tmpdata() {
+    //   return this.$store.state.tmplist.datalist.filter((item) => {
+    //     return this.$route.params.id == item._id;
+    //   })[0];
+    // },
     cartlist(){
       return this.$store.state.cart.goodslist
     }
@@ -65,8 +65,12 @@ export default {
       });
     },
   },
-  created() {
-    console.log(this.tmpdata);
+  async created() {
+    const result = await this.$request.get("/goods/"+this.$route.params.id);
+    const { data } = result.data;
+    this.goodsData = data[0]
+    console.log(result);
+    console.log(this.$route.params.id);
   },
   components: {
     NavBar,

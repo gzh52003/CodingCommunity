@@ -55,6 +55,10 @@ router.get('/jwtverify', (req, res) => {
         }))
     }
 });
+router.get('/ceshi', (req, res) => {
+    console.log("123");
+    res.send("asd")
+});
 // 短信验证码
 router.use('/sendSms', Sms);
 // 图形验证码
