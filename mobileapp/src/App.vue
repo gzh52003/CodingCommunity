@@ -80,6 +80,9 @@ export default {
 };
 </script>
 <style lang="scss">
+html{
+  font-size: 41.4px;
+}
 .price {
   del {
     color: #999;

@@ -9,7 +9,7 @@
         name="username"
         label="用户名"
         placeholder="用户名"
-        :rules="[{pattern , required: true, message: userTips }]"
+        :rules="[{pattern:userTips , required: true, message: '主人怎么可能把自己名字写错呢',trigger:'onChange' }]"
       />
       <van-field
         v-model="password"
@@ -17,25 +17,40 @@
         name="password"
         label="密码"
         placeholder="密码"
-        :rules="[{pattern, required: true, message: pswTips }]"
+        autocomplete="off"
+        :rules="[{pattern:pswTips, required: true, message: '主人~密码格式好像不对哦QAQ',trigger:'onChange' }]"
       />
 
       <van-field
         v-model="ma"
         type="text"
-        
         name="ma"
-        label="短信验证码"
+        label="手机号"
         placeholder="手机号"
-       :rules="[{ validator, message: '请输入正确内容',trigger:'onChange' }]"
+        autocomplete="off"
+       :rules="[{required: true, validator:phoneCheck, message: '请输入正确手机号哦~',trigger:'onChange' }]"
       />
 
       <van-button type="info" size="small" v-if="sendClick" class="sendma" @click='sendma' :disabled="show">点击发送验证码</van-button>
       <van-count-down :time="time" format="ss 秒后重发" @finish='finish' v-else />
 
+      <van-field
+        v-model="yzm"
+        type="text"
+        name="yzm"
+        label="短信验证码"
+        placeholder="验证码"
+        autocomplete="off"
+       :rules="[{required: true,  message: '验证码错误' }]"
+      />
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit" @failed="onFailed">注册</van-button>
       </div>
+        <div style="margin: 16px;">
+    <van-button round block type="primary" to='/login' >
+      返回登录页
+    </van-button>
+  </div>
     </van-form>
     <p class="readme">
       已阅读并同意以下协议
@@ -44,7 +59,7 @@
         target="_blank"
       >金丰平台服务协议</a>、
       <a
-        href="https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao201703241622_61002.html"
+        href="https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/sui4t_bu1_taobao201703241622_61002.html"
         target="_blank"
       >隐私权政策</a>、
       <a
@@ -71,76 +86,56 @@ export default {
       username: "",
       password: "",
       ma:'',
-      pattern: /(\w|\.){6,12}/,
+      yzm:'',
+      pswTips: /(\w|\.){6,12}/,
+      userTips: /(\w|\.){6,12}/,
       sendClick: true,
       show:true
     };
   },
   methods: {
-    sendma(){
-      
+    //发送验证码
+    async sendma(){
       this.sendClick = false
+      console.log(this.ma)
+      const {data} = await this.$request.get(`/sendSms/${this.ma}`)
+      console.log(data)
     },
+    //倒计时完成
     finish(){
       this.sendClick = true
     },
-    validator(value,rules){
-     if(/^1[3,4,5,6,7,8]\d{9}$/.test(value)){
-       console.log('验证成功')
+
+    //手机号验证
+    phoneCheck(value,rules){
+     if(/^1[3,4,5,6,7,8]\d{9}$/.test(value)){       
        this.show = false
        return true
-     }else{
-       console.log('验证失败')
+     }else{      
        this.show = true
        return false
      }
-      // console.log(value)
-      // console.log('132',rules.pattern.test(value))
-      // if (!this.pattern.test(value)) {
-      //   value = "请输入正确的格式";
-      // } 
-        
-      // else if(rules.pattern.test(value)){
-      //   console.log(this.show)
-      //   this.show=false
-      // }
+    },
 
-      // return value;
-    },
-    userTips(value, rules) {
-      console.log("value1", value, rules);
-     
-      if (!rules.pattern.test(value)) {
-        value = "请输入正确的格式";
-      } else {
-        return value;
-      }
 
-      
-    },
-    pswTips(value, rules) {
-    
-  
-      if (!rules.pattern.test(value)) {
-        value = "请输入正确的格式";
-      } else {
-        return value;
-      }
-    },
-    onFailed(errorInfo) {
-      console.log("failed", errorInfo);
-    },
+    //点击注册按钮
     async onSubmit(values) {
-      console.log("submit", values);
+      
+      //发起请求，检查是否重名
       const { data } = await this.$request.get("/reg/check", {
         params: { userName: values.username },
       });
-      console.log("data.code", data.code);
-      if (data.code === 1) {
+     
+      
+
+
+
+      //code===1，不重名可以注册
+      if (data.code === 1) {        
         const { data } = await this.$request.post("/reg", {
           ...values,
         });
-        console.log(data);
+       
         Dialog.alert({
           title: "注册成功",
           message: "即将为您跳转到登录页",
@@ -148,10 +143,11 @@ export default {
         }).then(() => {
           this.$router.push("/login");
         });
-      } else {
+      }       
+      else {
         Dialog.alert({
-          title: "用户名已注册",
-          message: "重新选个好名字吧",
+          title: "用户名已注册或验证码输入错误",
+          message: "重新选个好名字吧或检查验证码是否有误",
           theme: "round-button",
         }).then(() => {
           // on close
@@ -196,4 +192,5 @@ export default {
   position: absolute;
   transform: translate(229px, -37px);
 }
+
 </style>
