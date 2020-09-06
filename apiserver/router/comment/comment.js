@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
         pageNo,
     } = req.query;
     const skip = (pageNo - 1) * pageSize;
+    console.log("skip" + skip);
     try {
         let result = await find("comment", {}, {
             pagesize: pageSize * 1,

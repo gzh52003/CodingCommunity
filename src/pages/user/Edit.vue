@@ -8,7 +8,11 @@
       <div class="demo-type">
         <el-form-item label prop="avatar_large">
           <div>
-            <el-avatar referrer="no-referrer|origin|unsafe-url" :size="100" :src="ruleForm.avatar_large"></el-avatar>
+            <el-avatar
+              referrer="no-referrer|origin|unsafe-url"
+              :size="100"
+              :src="ruleForm.avatar_large"
+            ></el-avatar>
           </div>
         </el-form-item>
       </div>
@@ -35,7 +39,8 @@ export default {
   data() {
     return {
       userid: "",
-      circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      circleUrl:
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       ruleForm: {
         avatar_large: "",
         company: "",
@@ -73,7 +78,7 @@ export default {
   methods: {
     submitForm() {
       this.$refs["ruleForm"].validate(async (valid) => {
-        console.log(13, valid);
+        console.log(12, valid);
         // valid为校验结果，全部校验通过是值为true,否则为false
         if (valid) {
           const { userid, ruleForm } = this;
@@ -85,7 +90,7 @@ export default {
               type: "success",
               message: "修改成功",
             });
-            this.$router.push('../')
+            this.$router.push("../");
           }
         } else {
           console.log("error submit!!");
@@ -104,7 +109,7 @@ export default {
     const userdata = data.data[0]; //{一个对象}
     console.log(userdata);
     this.userid = id;
-    console.log(this.userid)
+    console.log(this.userid);
     // const o = {avatar_large:111}
     //this.ruleForm是目标对象，把userdata这个对象整合到this.ruleForm里
     Object.assign(this.ruleForm, userdata);

@@ -1,14 +1,14 @@
 const common = {
-    state:{
-        showTabbar:true
+    state: {
+        showTabbar: true
     },
-    getters:{
-        test(){
+    getters: {
+        test() {
             return 'common';
         }
     },
-    mutations:{
-        displayTabbar(state,payload){
+    mutations: {
+        displayTabbar(state, payload) {
             state.showTabbar = payload;
         }
     }

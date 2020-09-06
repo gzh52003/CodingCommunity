@@ -2,7 +2,7 @@ const goods = require('./goods/goods')
 const blog = require('./blog')
 const express = require('express')
 const session = require("express-session")
-
+const order = require('./order/order')
 const token = require('./utils/token')
 const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
@@ -59,5 +59,5 @@ router.get('/jwtverify', (req, res) => {
 router.use('/sendSms', Sms);
 // 图形验证码
 router.use('/vcode', vcode);
-
+router.use('/order', order)
 module.exports = router

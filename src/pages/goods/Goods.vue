@@ -134,8 +134,6 @@ export default {
         );
         let { data } = result.data;
         data = this.classification(data);
-        console.log(data);
-        console.log(data);
         return data;
       }
     },
@@ -231,7 +229,9 @@ export default {
   },
   async created() {
     const data = await this.getGoodsList(true);
+
     this.total = data.length;
+
     this.goodsList = await this.getGoodsList();
   },
 };

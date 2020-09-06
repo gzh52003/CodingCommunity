@@ -11,7 +11,7 @@ Vue.use(ElementUI)
 Vue.prototype.$request = request
 
 new Vue({
-  store,
+  // store,
   router,
   render: h => h(App)
 }).$mount('#app')

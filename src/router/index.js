@@ -3,9 +3,7 @@ import Vue from 'vue';
 // 1. 引入Vue-Router
 import VueRouter from 'vue-router'
 
-import UserList from '../pages/manage/UserList.vue'
-import Order from '../pages/manage/Order.vue'
-import Goods from '../pages/manage/Goods.vue'
+import UserList from '../pages/user/List.vue'
 
 import Public from '../Pub.vue'
 import axios from "axios"
@@ -41,7 +39,7 @@ const router = new VueRouter({
       path: '/public',
       component: Public,
       children: [{
-          path: '/',
+          path: '',
           redirect: 'home'
         },
         {
@@ -85,12 +83,19 @@ const router = new VueRouter({
             redirect: 'list',
             path: ''
           }, {
+            path: 'add',
+            component: () => import('../pages/goods/Edit.vue')
+          }, {
             path: 'edit/:id',
             component: () => import('../pages/goods/Edit.vue')
           }, {
             name: 'list',
             path: 'list',
             component: () => import('../pages/goods/Goods.vue'),
+          }, {
+            name: 'add',
+            path: 'add',
+            component: () => import('../pages/goods/Add.vue')
           }]
         },
         {
@@ -121,7 +126,6 @@ const router = new VueRouter({
   ]
 })
 
-//  校验token是否一致,全局路由守卫
 
 // router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
 //   // 重登陆删除本地数据
@@ -147,36 +151,4 @@ const router = new VueRouter({
 //   }
 // })
 
-router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
-  // 重登陆删除本地数据
-  if (to.path === '/login') {
-    localStorage.removeItem('token')
-  }
-  let user = JSON.parse(localStorage.getItem('token'))
-
-  let res = await axios.get('http://localhost:10000/api/jwtverify', {
-    params: {
-      authorization: user
-    }
-  })
-
-  // 登录验证：如果本地没有储存用户且不在登录页面则跳转
-
-  if (to.path !== '/login' && to.path !== '/reg' && !res.data.code) {
-    next({
-      path: '/login'
-    })
-  } else {
-    next()
-  }
-})
-
-
-
-
-
-
-
 export default router;
-
-console.log('router=', router);
