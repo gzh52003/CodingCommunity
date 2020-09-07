@@ -30,7 +30,6 @@
         SubmitBar,
         NavBar
     } from 'vant';
-
     Vue.use(SubmitBar);
     Vue.use(NavBar);
     export default {
@@ -54,7 +53,9 @@
             onClickLeft() {
                 this.$router.push('./cart')
             },
-            summary() {}
+            summary() {
+                
+            }
         },
         created() {
             this.$store.commit('displayTabbar', false);

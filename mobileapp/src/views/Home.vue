@@ -14,8 +14,8 @@
         background="transparent"
         placeholder="请输入搜索关键词"
       />
-      <span class="top-icon">
-        <van-icon name="apps-o" :to="{ path: '/discover' }" size="30" />
+      <span class="top-icon" @click="toClassification"> 
+        <van-icon name="apps-o"  size="30" />
         <br />
         <span>分类</span>
       </span>
@@ -47,12 +47,14 @@
         </span>
       </div>
     </van-notice-bar>
-    <home-goods-list/>
-    <div class="long"></div>
+    <home-goods-list>
+
+    </home-goods-list>
   </div>
 </template>
 <script>
 import Vue from "vue";
+import HomeGoodsList from "../components/HomeGoodsList"
 import { Swipe, SwipeItem, Sticky, Search, Icon, NoticeBar } from "vant";
 Vue.use(Sticky);
 Vue.use(Swipe);
@@ -60,8 +62,6 @@ Vue.use(SwipeItem);
 Vue.use(Search);
 Vue.use(Icon);
 Vue.use(NoticeBar);
-
-import HomeGoodsList from "../components/HomeGoodsList"
 
 export default {
   data() {
@@ -96,6 +96,12 @@ export default {
         }, 500);
       };
     },
+    toClassification(){
+      this.$router.replace('/classification')
+    }
+  },
+  async created(){
+    let res = await this.$request.get("/goods")
   },
   mounted() {
     window.addEventListener("scroll", this.scrollHandle); // 绑定页面的滚动事件
@@ -180,8 +186,4 @@ export default {
   align-items: center;
 }
 
-.long {
-  height: 2000px;
-  background: linear-gradient(to bottom, red, blue);
-}
 </style>

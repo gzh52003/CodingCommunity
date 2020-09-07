@@ -153,7 +153,6 @@ export default {
       this.goodsList = await this.getGoodsList();
     },
     remove(id) {
-      console.log(id);
       this.$confirm("确定删除这条评论吗", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
