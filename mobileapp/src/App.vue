@@ -67,9 +67,9 @@ export default {
   },
   watch: {
     "$route.path"(newVal, oldVal) {
-      console.log(newVal,oldVal)
+      
       if(newVal === '/login' || newVal === '/reg'){
-        console.log(1);
+        
         this.$store.state.common.showTabbar = false;
       }else{
         this.$store.state.common.showTabbar = true;

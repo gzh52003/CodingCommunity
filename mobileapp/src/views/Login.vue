@@ -90,8 +90,10 @@ export default {
       });
       console.log(data.code);
       if (data.code === 1) {
+        this.$store.commit('login11',values.username)
         //设置localStorage
         localStorage.setItem("userInfo", JSON.stringify(data.data));
+
         Dialog.alert({
           message: "登录成功！",
           theme: "round-button",

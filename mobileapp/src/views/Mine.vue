@@ -63,14 +63,15 @@ Vue.use(NavBar);
 export default {
   data(){
     return{
-      userInfo:''
+      userInfo:'',
+      
     }
   },
 
   created(){
     // this.userInfo = localStorage.getItem('userInfo')
     // console.log(JSON.parse(this.userInfo))
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))||{username:'请登录'}
+     this.userInfo = JSON.parse(localStorage.getItem('userInfo'))||{username:'请登录'}
   },
 
   
@@ -93,8 +94,10 @@ export default {
         message: "你确定要退出吗？？？",
       })
         .then(() => {
+          console.log(111111111111111)
+          this.$store.commit('logOut')
            localStorage.removeItem('userInfo')
-          this.$router.push("/login");          
+          // this.$router.push("/login");  
         })
         
     },

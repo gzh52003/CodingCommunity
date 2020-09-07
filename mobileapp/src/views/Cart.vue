@@ -106,7 +106,8 @@ export default {
     goback() {
       this.$router.push("/home/");
     },
-    onSubmit() {},
+
+
     change() {
       this.changesuccess = !this.changesuccess;
     },
@@ -118,12 +119,21 @@ export default {
     removeItem() {
       Dialog.confirm({
         message: "确定删除该商品吗？",
-      }).then(() => {
-        this.$store.commit("remove");
-      }).catch(()=>{});
+      })
+        .then(() => {
+          this.$store.commit("remove");
+        })
+        .catch(() => {});
     },
     onSubmit() {
-      this.$router.push("./summary");
+      console.log(this.$store.state);
+      if(this.$store.state.username ===''){
+        this.$router.push('./login')
+      }else{
+         this.$router.push("./summary");
+      }
+     
+     
     },
   },
   created() {
