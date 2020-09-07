@@ -11,8 +11,11 @@
 />
     <section class="userinfo">
       <div class="showMe">
-        <van-image round width="10rem" height="10rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-        <h2>欢迎你！{{userInfo.username}}</h2>
+        <van-image round  src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <h2 style="font-size:16px">欢迎你！
+          <button @click='gotoLogin' v-if='userInfo.username=="请登录"'>{{userInfo.username}}</button>
+          <span v-else>{{userInfo.username}}</span>
+          </h2>
       </div>
       <van-grid>
         <van-grid-item icon="star-o" text="收藏夹" />
@@ -24,8 +27,8 @@
 
     <section class="myOrder">
       <figure>
-         <h2>我的订单</h2>
-         <span>查看全部订单》</span>
+         <h2 style="font-size:16px">我的订单</h2>
+         <span style="font-size:16px;line-height:43px">查看全部订单》</span>
       </figure>
      
       <van-grid>
@@ -67,13 +70,19 @@ export default {
   created(){
     // this.userInfo = localStorage.getItem('userInfo')
     // console.log(JSON.parse(this.userInfo))
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))||{username:'请登录'}
   },
+
+  
+
   methods: {
     onClickLeft() {
       Toast('返回');
       this.$router.back()
    
+    },
+    gotoLogin(){
+      this.$router.replace('/login')
     },
     onClickRight() {
       this.$router.push('/more')
