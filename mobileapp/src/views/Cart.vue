@@ -16,15 +16,8 @@
 
     <!-- 商品订单 -->
 
-    <van-card
-      :num="item.num"
-      :price="item.pricecurrent"
-      :title="item.title"
-      :thumb="item.imgurl"
-      :key="item._id"
-      v-for="item in goodslist"
-      @click="gotoDetail($event,item._id)"
-    >
+    <van-card :num="item.num" :price="item.pricecurrent" :title="item.title" :thumb="item.imgurl" :key="item._id"
+      v-for="item in goodslist" @click="gotoDetail($event,item._id)">
       <template #tag>
         <van-checkbox v-model="item.checked"></van-checkbox>
       </template>
@@ -57,136 +50,140 @@
 
 
 <script>
-import Vue from "vue";
-import {
-  Sticky,
-  Tab,
-  Tabs,
-  Card,
-  Icon,
-  SubmitBar,
-  Stepper,
-  Dialog,
-} from "vant";
+  import Vue from "vue";
+  import {
+    Sticky,
+    Tab,
+    Tabs,
+    Card,
+    Icon,
+    SubmitBar,
+    Stepper,
+    Dialog,
+  } from "vant";
 
-Vue.use(Sticky);
-Vue.use(Tab);
-Vue.use(Tabs);
-Vue.use(Card);
-Vue.use(Icon);
-Vue.use(SubmitBar);
-Vue.use(Stepper);
+  Vue.use(Sticky);
+  Vue.use(Tab);
+  Vue.use(Tabs);
+  Vue.use(Card);
+  Vue.use(Icon);
+  Vue.use(SubmitBar);
+  Vue.use(Stepper);
 
-export default {
-  name: "Cart",
-  data() {
-    return {
-      changesuccess: false,
-    };
-  },
-  computed: {
-    goodslist() {
-      return this.$store.state.cart.goodslist;
+  export default {
+    name: "Cart",
+    data() {
+      return {
+        changesuccess: false,
+
+      };
     },
-    check: {
-      get() {
-        return this.goodslist.every((item) => item.checked);
+    computed: {
+      goodslist() {
+        return this.$store.state.cart.goodslist;
       },
-      set(val) {
-        this.$store.commit("allcheck", val);
+      check: {
+        get() {
+          return this.goodslist.every((item) => item.checked);
+        },
+        set(val) {
+          this.$store.commit("allcheck", val);
+          return this.$store.getters.totalPrice;
+        },
+      },
+
+      totalPrice() {
+        // return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
+
+        return this.$store.getters.totalPrice;
       },
     },
+    methods: {
+      goback() {
+        this.$router.push("/home/");
+      },
+      onSubmit() {},
+      change() {
+        this.changesuccess = !this.changesuccess;
+      },
+      gotoDetail(e, id) {
+        if (e.target.tagName === "IMG") {
+          this.$router.push("/goods/" + id);
+        }
+      },
+      removeItem() {
+        Dialog.confirm({
+          message: "确定删除该商品吗？",
+        }).then(() => {
+          this.$store.commit("remove");
+        }).catch(() => {});
+      },
+      onSubmit() {
+        this.$router.push("./summary");
+      },
+    },
+    created() {
+      this.$store.commit("displayTabbar", false);
+    },
 
-    totalPrice() {
-      // return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
-      return this.$store.getters.totalPrice;
+    beforeDestroy() {
+      this.$store.commit("displayTabbar", true);
     },
-  },
-  methods: {
-    goback() {
-      this.$router.push("/home/");
-    },
-    onSubmit() {},
-    change() {
-      this.changesuccess = !this.changesuccess;
-    },
-    gotoDetail(e, id) {
-      if (e.target.tagName === "IMG") {
-        this.$router.push("/goods/" + id);
-      }
-    },
-    removeItem() {
-      Dialog.confirm({
-        message: "确定删除该商品吗？",
-      }).then(() => {
-        this.$store.commit("remove");
-      }).catch(()=>{});
-    },
-    onSubmit() {
-      this.$router.push("./summary");
-    },
-  },
-  created() {
-    this.$store.commit("displayTabbar", false);
-  },
-
-  beforeDestroy() {
-    this.$store.commit("displayTabbar", true);
-  },
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-//头部
-/deep/.van-sticky {
-  height: 50px;
-  background: orangered;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 15px;
-  color: #fff;
+  //头部
+  /deep/.van-sticky {
+    height: 50px;
+    background: orangered;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    color: #fff;
 
-  h2 {
-    font-size: 20px;
+    h2 {
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 18px;
+      vertical-align: middle;
+    }
   }
-  p {
+
+  // 商品
+  .van-image {
+    left: 30px;
+  }
+
+  .van-card__title {
+    font-size: 14px;
+    margin-top: 6px;
+    font-weight: 600;
+    position: absolute;
+    left: 30px;
+  }
+
+  .van-card__price {
+    color: red;
+    font-weight: 600;
+    position: absolute;
+    left: 30px;
+    top: 34px;
     font-size: 16px;
-    line-height: 18px;
-    vertical-align: middle;
   }
-}
 
-// 商品
-.van-image {
-  left: 30px;
-}
+  .clearCart {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    // text-align: right;
+  }
 
-.van-card__title {
-  font-size: 14px;
-  margin-top: 6px;
-  font-weight: 600;
-  position: absolute;
-  left: 30px;
-}
-
-.van-card__price {
-  color: red;
-  font-weight: 600;
-  position: absolute;
-  left: 30px;
-  top: 34px;
-  font-size: 16px;
-}
-
-.clearCart {
-  padding: 10px;
-  display: flex;
-  justify-content: flex-end;
-  // text-align: right;
-}
-
-.van-submit-bar__button {
-  font-weight: 600;
-  font-size: 18px;
-}
+  .van-submit-bar__button {
+    font-weight: 600;
+    font-size: 18px;
+  }
 </style>
