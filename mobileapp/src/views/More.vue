@@ -54,7 +54,7 @@ export default {
     };
   },
   created() {
-    this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    this.userInfo = JSON.parse(localStorage.getItem("userInfo"))||{};
   },
   methods: {
     exit() {
@@ -72,7 +72,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .van-nav-bar {
   .van-icon {
     color: #646566;
