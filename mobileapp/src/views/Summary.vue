@@ -9,6 +9,8 @@
                     <span>￥{{item.pricecurrent}}</span>
                 </p>
             </template>
+
+
         </van-card>
 
 
@@ -43,7 +45,8 @@
                 return this.$store.state.cart.goodslist.filter(item => item.checked)
             },
             totalPrice() {
-                return this.$store.getters.totalPrice
+                return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
+
             },
 
         },
