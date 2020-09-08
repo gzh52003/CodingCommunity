@@ -36,7 +36,7 @@
         name: 'Summary',
         data() {
             return {
-
+                userInfo: ''
             }
         },
         computed: {
@@ -63,6 +63,7 @@
         },
         created() {
             this.$store.commit('displayTabbar', false);
+
         },
 
         beforeDestroy() {

@@ -94,7 +94,6 @@
 
       totalPrice() {
         // return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
-
         return this.$store.getters.totalPrice;
       },
     },
@@ -102,34 +101,56 @@
       goback() {
         this.$router.push("/home/");
       },
-      onSubmit() {},
+
+
       change() {
         this.changesuccess = !this.changesuccess;
       },
-      gotoDetail(e, id) {
-        if (e.target.tagName === "IMG") {
-          this.$router.push("/goods/" + id);
-        }
+      methods: {
+        goback() {
+          this.$router.push("/home/");
+        },
+        onSubmit() {},
+        change() {
+          this.changesuccess = !this.changesuccess;
+        },
+        gotoDetail(e, id) {
+          if (e.target.tagName === "IMG") {
+            this.$router.push("/goods/" + id);
+          }
+        },
+        removeItem() {
+          Dialog.confirm({
+            message: "确定删除该商品吗？",
+          }).then(() => {
+            this.$store.commit("remove");
+          }).catch(() => {});
+        },
+        onSubmit() {
+          this.$router.push("./summary");
+        },
       },
       removeItem() {
         Dialog.confirm({
-          message: "确定删除该商品吗？",
-        }).then(() => {
-          this.$store.commit("remove");
-        }).catch(() => {});
+            message: "确定删除该商品吗？",
+          })
+          .then(() => {
+            this.$store.commit("remove");
+          })
+          .catch(() => {});
       },
       onSubmit() {
-        this.$router.push("./summary");
-      },
-    },
-    created() {
-      this.$store.commit("displayTabbar", false);
-    },
+        console.log(this.$store.state);
+        if (this.$store.state.username === '') {
+          this.$router.push('./login')
+        } else {
+          this.$router.push("./summary");
+        }
 
-    beforeDestroy() {
-      this.$store.commit("displayTabbar", true);
-    },
-  };
+
+      },
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

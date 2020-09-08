@@ -61,6 +61,8 @@ export default {
       Dialog.confirm({
         title: "确定要退出吗？",
       }).then(() => {
+           console.log(111111111111111)
+          this.$store.commit('logOut')
         localStorage.removeItem("userInfo");
         this.$router.push("/login");
       });

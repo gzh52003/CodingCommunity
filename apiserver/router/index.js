@@ -8,6 +8,7 @@ const vcode = require('./huihui/vcode')
 const cors = require('./filter/cors');
 const user = require('./userlist/user')
 const Sms = require('./huihui/sendSms')
+const trolley = require('./trolley/trolley')
 const router = express.Router()
 const {
     formatData
@@ -64,4 +65,5 @@ router.use('/sendSms', Sms);
 // 图形验证码
 router.use('/vcode', vcode);
 router.use('/order', order)
+router.use('/trolley', trolley)
 module.exports = router
