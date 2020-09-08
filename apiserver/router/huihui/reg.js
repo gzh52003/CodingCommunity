@@ -13,10 +13,19 @@ const mongo = require('../utils/mongo');
 router.post('/', async (req, res) => {
     let {
         username,
-        password
+        password,
+        yzm
     } = req.body;
     console.log('username=', username)
     console.log('password=', password)
+    console.log('yzm=', yzm)
+    console.log('req.session.Sms',req.session.Sms)
+    if (yzm !== req.session.Sms) {
+      res.send(formatData({
+          code: 10
+      }))
+      return;
+  }
     // const hash = crypto.createHash('md5');
     // hash.update(password+'laoxie'); // 加盐 盐值
     // password = hash.digest('hex');
@@ -25,7 +34,7 @@ router.post('/', async (req, res) => {
     password = md5(password)
     let result
     try {
-        result = await mongo.insert('user', {
+        result = await mongo.insert('userlist', {
             username,
             password
         });
@@ -45,7 +54,7 @@ router.get('/check', async (req, res) => {
         userName
     } = req.query;
     console.log(444444)
-    const result = await mongo.find('user', {
+    const result = await mongo.find('userlist', {
         username: userName
     });
     if (result.length > 0) {

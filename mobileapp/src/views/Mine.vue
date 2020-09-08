@@ -75,7 +75,6 @@ export default {
   },
 
   
-
   methods: {
     onClickLeft() {
       Toast('返回');
@@ -88,19 +87,7 @@ export default {
     onClickRight() {
       this.$router.push('/more')
     },
-    exitCLick() {
-      Dialog.confirm({
-        title: "退出确认",
-        message: "你确定要退出吗？？？",
-      })
-        .then(() => {
-          console.log(111111111111111)
-          this.$store.commit('logOut')
-           localStorage.removeItem('userInfo')
-          // this.$router.push("/login");  
-        })
-        
-    },
+
   },
 };
 </script>

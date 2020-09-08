@@ -9,8 +9,17 @@
         name="username"
         label="用户名"
         placeholder="用户名"
-        :rules="[{pattern:userTips , required: true, message: '主人怎么可能把自己名字写错呢',trigger:'onChange' }]"
+        :rules="[{validator:userTips , required: true, message: '请输入正确的用户名格式',trigger:'onChange' }]"
       />
+      <van-button
+        type="info"
+        size="small"
+        v-if="sendClick1"
+        class="checkUsername"
+        @click="checkUsername"
+        :disabled="show1"
+      >检查用户名是否被注册</van-button>
+
       <van-field
         v-model="password"
         type="password"
@@ -18,7 +27,7 @@
         label="密码"
         placeholder="密码"
         autocomplete="off"
-        :rules="[{pattern:pswTips, required: true, message: '主人~密码格式好像不对哦QAQ',trigger:'onChange' }]"
+        :rules="[{pattern:pswTips, required: true, message: '请输入6到12位的密码格式',trigger:'onChange' }]"
       />
 
       <van-field
@@ -51,7 +60,7 @@
         :rules="[{required: true,  message: '验证码错误' }]"
       />
       <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit" >注册</van-button>
+        <van-button round block type="info" native-type="submit">注册</van-button>
       </div>
       <div style="margin: 16px;">
         <van-button round block type="primary" to="/login">返回登录页</van-button>
@@ -81,36 +90,58 @@
 
 <script>
 import Vue from "vue";
-import { Form, Dialog, CountDown } from "vant";
+import { Form, Dialog, CountDown,Toast } from "vant";
 Vue.use(Form);
 Vue.use(CountDown);
+Vue.use(Toast);
 export default {
   data() {
     return {
-      time: 3 * 1000,
+      userMessage: "",
+      time: 60 * 1000,
       username: "",
       password: "",
       ma: "",
       yzm: "",
       pswTips: /(\w|\.){6,12}/,
-      userTips: /(\w|\.){6,12}/,
+      // userTips: /(\w|\.){6,12}/,
       sendClick: true,
+      sendClick1: true,
       show: true,
+      show1:true
     };
   },
-  // created() {
-  //   this.$store.commit("displayTabbar", false);
-  // },
-  //  beforeDestroy() {
-  //   this.$store.commit("displayTabbar", true);
-  // },
+
   methods: {
+     userTips(val) {
+       if (/(\w|\.){3,12}/.test(val)) {
+        this.show1 = false;
+        return true;
+      } else {
+        this.show1 = true;
+        return false;
+      }
+    },
+
+    async checkUsername(){
+      console.log(this.username)
+        const { data } = await this.$request.get("/reg/check", {
+          params: {
+            userName: this.username,
+          },
+        });
+        if(data.code === 1){
+          Toast.success('恭喜你，改用户名可以注册');
+        }else{
+          Toast.fail('用户名已存在');
+        }
+    },
+
     //发送验证码
     async sendma() {
       this.sendClick = false;
       console.log(this.ma);
       const { data } = await this.$request.get(`/sendSms/${this.ma}`);
-      console.log(data);
     },
     //倒计时完成
     finish() {
@@ -139,31 +170,18 @@ export default {
 
       //code===1，不重名可以注册
       if (data.code === 1) {
+        console.log(values);
         const { data } = await this.$request.post("/reg", {
           ...values,
         });
-
-        Dialog.alert({
-          title: "注册成功",
-          message: "即将为您跳转到登录页",
-          theme: "round-button",
-        }).then(() => {
-          this.$router.push("/login");
-        });
-      } else {
-        Dialog.alert({
-          title: "用户名已注册或验证码输入错误",
-          message: "重新选个好名字吧或检查验证码是否有误",
-          theme: "round-button",
-        }).then(() => {
-          // on close
-        });
-        console.log("data.code", data.code);
-        if (data.code === 1) {
-          const { data } = await this.$request.post("/reg", {
-            ...values,
+        console.log(data);
+        if (data.code === 10) {
+          Dialog.alert({
+            title: "用户名已注册或验证码输入错误",
+            message: "重新选个好名字吧或检查验证码是否有误",
+            theme: "round-button",
           });
-          console.log(data);
+        } else {
           Dialog.alert({
             title: "注册成功",
             message: "即将为您跳转到登录页",
@@ -171,15 +189,14 @@ export default {
           }).then(() => {
             this.$router.push("/login");
           });
-        } else {
-          Dialog.alert({
-            title: "用户名已注册",
-            message: "重新选个好名字吧",
-            theme: "round-button",
-          }).then(() => {
-            // on close
-          });
         }
+      } else {
+        Dialog.alert({
+          title: "用户名已注册或验证码输入错误",
+          message: "重新选个好名字吧或检查验证码是否有误",
+          theme: "round-button",
+        });
+        console.log("data.code", data.code);
       }
     },
   },
@@ -233,30 +250,10 @@ h3 {
   transform: translate(229px, -37px);
 }
 
-.colon {
-  display: inline-block;
-  margin: 0 4px;
-  color: #ee0a24;
-}
-
-.block {
-  display: inline-block;
-  width: 22px;
-  color: #fff;
-  font-size: 12px;
-  text-align: center;
-  background-color: #ee0a24;
-}
-
-.van-count-down {
-  display: inline-block;
-  position: absolute;
-  transform: translate(229px, -31px);
-}
-
-.van-form .sendma {
+.van-form .checkUsername{
   display: inline-block;
   position: absolute;
   transform: translate(229px, -37px);
 }
+
 </style>

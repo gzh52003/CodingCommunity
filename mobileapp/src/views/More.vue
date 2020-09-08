@@ -54,15 +54,14 @@ export default {
     };
   },
   created() {
-    this.userInfo = JSON.parse(localStorage.getItem("userInfo"))||{};
+    this.userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
   },
   methods: {
     exit() {
       Dialog.confirm({
         title: "确定要退出吗？",
       }).then(() => {
-           console.log(111111111111111)
-          this.$store.commit('logOut')
+        this.$store.commit("logOut");
         localStorage.removeItem("userInfo");
         this.$router.push("/login");
       });
@@ -85,7 +84,7 @@ export default {
   }
 }
 .van-cell-group__title {
-    padding: 16px 0 8px;
+  padding: 16px 0 8px;
   img {
     width: 50px;
     height: 50px;

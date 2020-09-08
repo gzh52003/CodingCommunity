@@ -3,7 +3,6 @@ const {
     // updateById,
     // remove,
     find,
-    remove,
     updateById,
     insert
 } = require("../utils/mongo");
@@ -59,7 +58,6 @@ router.get('/:id',async(req,res)=>{
         res.send(Enum(1005));
     }else{
          cart = cart[0];
-        console.log('goodsInfo',cart);
         let trolleyitems =JSON.parse (cart.trolleyitems);
         cart.queryList = trolleyitems.map(item => {
             return item.goodsId

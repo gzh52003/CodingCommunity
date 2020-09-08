@@ -88,7 +88,40 @@ router.put('/changeStatus/:id', async (req, res) => {
         res.send(Enum(1002))
     }
 })
+//获取订单详情
+router.get('/detail/:id',async(req,res)=>{
+    const {
+        id
+    }=req.params;
+    console.log(id);
+    let orderInfo = await find('order',{
+        _id:id
+    })
+    let userId = orderInfo[0].userId;
+    const userInfo = await find('userlist',{
+        _id:userId
+    })
 
+    orderInfo[0].userId = userInfo
+    let orderitems = JSON.parse(orderInfo[0].goodsList);
+    orderInfo.queryList = orderitems.map(item => {
+        return item.goodsId
+    })
+        await find('goods',{
+            _id: orderInfo.queryList
+        }).then(item=>{
+          item = item.map(it=>{
+            orderitems.forEach(trItem =>{
+                if(trItem.goodsId == it._id){
+                    it.total = trItem.total
+                }
+            })
+            return it
+          })
+          orderInfo[0].queryList =item;
+            res.send(Enum(1001,orderInfo))
+        })
+})
 // 获取一条数据
 router.get('/single', async (req, res) => {
     const {
@@ -99,14 +132,6 @@ router.get('/single', async (req, res) => {
     })
     userInfo.forEach(async order => {
         order.goodsList = JSON.parse(order.goodsList);
-        // order.goodsList = order.goodsList.map(async goodsItem => {
-        //     let info = await find("goods", {
-        //         _id: goodsItem.goodsId
-        //     });
-        //     console.log('info', info[0]);
-        //     goodsItem.goodsInfo = info[0];
-        //     return goodsItem;
-        // })
         order.queryList = order.goodsList.map(item => {
             return item.goodsId
         })
