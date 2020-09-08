@@ -9,6 +9,8 @@
                     <span>￥{{item.pricecurrent}}</span>
                 </p>
             </template>
+
+
         </van-card>
 
 
@@ -16,7 +18,7 @@
 
 
         <van-submit-bar :price="totalPrice" button-text="提交订单" @submit="summary">
-            <p>共2件</p>
+            <p>共{{goodsNum}}件</p>
         </van-submit-bar>
     </div>
 </template>
@@ -34,7 +36,7 @@
         name: 'Summary',
         data() {
             return {
-                userInfo:''
+                userInfo: ''
             }
         },
         computed: {
@@ -42,21 +44,26 @@
                 return this.$store.state.cart.goodslist.filter(item => item.checked)
             },
             totalPrice() {
-                return this.$store.getters.totalPrice
-            },
+                return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
 
+            },
+            goodsNum() {
+                return this.goodslist.reduce((pre, item) => {
+                    return pre + item.num
+                }, 0)
+            }
         },
         methods: {
             onClickLeft() {
                 this.$router.push('./cart')
             },
             summary() {
-               
+
             }
         },
         created() {
             this.$store.commit('displayTabbar', false);
-            
+
         },
 
         beforeDestroy() {
