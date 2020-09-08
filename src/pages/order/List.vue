@@ -4,26 +4,23 @@
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <el-table
-      :data="goodsList"
+      :data="orderlist"
       :stripe="true"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index" label="#" width="100"></el-table-column>
-      <el-table-column prop="three_subtit" label="商品名"></el-table-column>
-      <el-table-column prop="tag" label="分类"></el-table-column>
-      <el-table-column prop="imgUrl" label="商品图片">
-        <template v-slot:default="scope">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="scope.row.imgUrl"
-            :preview-src-list="[scope.row.imgUrl]"
-          ></el-image>
-        </template>
+      <el-table-column el-link type="success" prop="_id" label="订单编号" class="orderId"></el-table-column>
+      <el-table-column prop="total" label="订单价格"  >
       </el-table-column>
-      <el-table-column prop="price" label="价格"></el-table-column>
-      <el-table-column prop="rest" label="库存"></el-table-column>
+      <el-table-column prop="status" label="是否发货">
+         <template slot-scope="scope">
+              <el-button size="mini" type="danger" plain v-if = "scope.row.buttonVisible" @click = "changeTable(scope.row._id)">未发货</el-button>
+              <el-button size="mini" type="primary" plain v-else @click = "changeTable(scope.row._id)">已发货</el-button>
+            </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="下单时间"></el-table-column>
       <el-table-column prop="options" label="操作">
         <template v-slot:default="scope">
           <el-button
@@ -42,6 +39,23 @@
             @click="remove(scope.row._id)"
             title="删除"
           ></el-button>
+           <el-button size="mini" type="primary" plain @click="orderDetail(scope.row._id)">订单详情</el-button>
+          <el-dialog title="订单详情" :visible.sync="dialogTableVisible">
+            <el-table :data="gridData">
+              <el-table-column property="userName" label="用户名" width="150"></el-table-column>
+               <el-table-column property="total" label="总价" width="200"></el-table-column>
+              <el-table-column  label="商品信息" width="300" type='expand'>
+                 <template slot-scope="scope">
+                    <el-table :data="scope.row.goodsList" width='100%' class="two-list">
+                        <el-table-column prop="three_subtit" label="商品名"></el-table-column>
+                        <el-table-column prop="total" label="数量"></el-table-column>
+                    </el-table>
+                 </template>
+              </el-table-column>
+              
+            </el-table>
+          </el-dialog>
+  
         </template>
       </el-table-column>
     </el-table>
@@ -73,6 +87,7 @@
   </div>
 </template>
 <script>
+import getLocalTime from '../../utils/formatTime'
 export default {
   data() {
     return {
@@ -81,7 +96,8 @@ export default {
         { value: 5, label: "每页5条" },
         { value: 10, label: "每页10条" },
       ],
-      goodsList: [],
+      dialogTableVisible : false,
+      orderlist: [],
       pageNo: 1,
       pageSize: 5,
       total: 0,
@@ -92,73 +108,101 @@ export default {
       idArr: [],
       value: 5,
       showPage: true,
+      gridData:[]
     };
   },
   methods: {
+   async orderDetail(id){
+     console.log(1);
+     this.dialogTableVisible = true
+     let obj ={}
+     const result =await this.$request.get('/order/detail/'+id);
+     const {data} = result.data
+     const dataList = data[0];
+      obj.userName = (dataList.userId)[0].username;
+     let goodsList = dataList.queryList;
+     obj.goodsList = goodsList;
+     obj.total = dataList.total;
+     this.gridData = [];
+     this.gridData.push(obj)
+    console.log(this.gridData);
+   },
+   async changeTable(id){
+     console.log(this.$event);
+      const result = await this.$request.put(`/order/changeStatus/${id}`);
+      const {code} = result.data;
+      if(code===1001){
+        this.orderlist = this.orderlist.map(item=>{
+          if(item._id===id){
+           item.buttonVisible = !item.buttonVisible
+          }
+          return item
+        })
+         this.$message({
+            type: "success",
+            message: "操作成功",
+          });
+      }
+    },
     dialogVisible() {
       this.multiDeleteVisible = false;
     },
-    classification(data) {
-      return (data = data.map((item) => {
-        switch (item.tag) {
-          case "foods":
-            item.tag = "美食";
-            break;
-          case "living":
-            item.tag = "家居";
-            break;
-          case "cook":
-            item.tag = "厨具";
-            break;
-          case "clothes":
-            item.tag = "服装";
-            break;
-          case "beauty":
-            item.tag = "护肤";
-            break;
-        }
-        return item;
-      }));
-    },
     // 传入的值为真则返回所有数据
-    async getGoodsList(all = false) {
+    async getorderlist(all = false) {
       let result;
       if (all) {
-        result = await this.$request.get("/goods");
+        result = await this.$request.get("/order");
         let { data } = result.data;
-        data = this.classification(data);
+        data = data.map(item=>{
+          item.createTime = getLocalTime(item.createTime);
+        if(item.status===1){
+                  item.buttonVisible = true
+          }else{
+            item.buttonVisible = true
+          }
+          return item
+        })
+        console.log(data);
         return data;
       } else {
         result = await this.$request.get(
-          `/goods?pageNo=${this.pageNo}&pageSize=${this.pageSize}`
+          `/order?pageNo=${this.pageNo}&pageSize=${this.pageSize}`
         );
         let { data } = result.data;
-        data = this.classification(data);
+      data = data.map(item=>{
+          item.createTime = getLocalTime(item.createTime);
+          if(item.status===1){
+            item.buttonVisible = true
+          }else{
+            item.buttonVisible = false
+          }
+          return item
+        })
         return data;
       }
     },
     async selected() {
       if (this.value === "all") {
         this.showPage = false;
-        this.goodsList = await this.getGoodsList(true);
+        this.orderlist = await this.getorderlist(true);
       } else {
         this.showPage = true;
         this.pageSize = this.value;
         this.pageNo = 1;
-        this.goodsList = await this.getGoodsList();
+        this.orderlist = await this.getorderlist();
       }
     },
     async changePage(pageNo) {
       this.pageNo = pageNo;
-      this.goodsList = await this.getGoodsList();
+      this.orderlist = await this.getorderlist();
     },
     remove(id) {
-      this.$confirm("确定删除这条评论吗", "提示", {
+      this.$confirm("确定删除这条订单吗", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(async () => {
-        const result = await this.$request.delete("/goods/" + id);
+        const result = await this.$request.delete("/order/" + id);
         if (result.data.code === 1001) {
           this.total--;
           if (
@@ -166,9 +210,9 @@ export default {
             this.total != 0
           ) {
             this.pageNo--;
-            this.goodsList = await this.getGoodsList();
+            this.orderlist = await this.getorderlist();
           } else {
-            this.goodsList = this.goodsList.filter((item) => item._id !== id);
+            this.orderlist = this.orderlist.filter((item) => item._id !== id);
           }
           this.$message({
             type: "success",
@@ -178,7 +222,7 @@ export default {
       });
     },
     edit(id) {
-      this.$router.push("/goods/edit/" + id);
+      this.$router.push("/order/edit/" + id);
     },
     handleSelectionChange(val) {
       if (val.length !== 0) {
@@ -212,9 +256,9 @@ export default {
           this.total !== 0
         ) {
           this.pageNo--;
-          this.goodsList = await this.getGoodsList();
+          this.orderlist = await this.getorderlist();
         } else {
-          this.goodsList = this.goodsList.filter((item) => {
+          this.orderlist = this.orderlist.filter((item) => {
             return !this.idArr.includes(item._id);
           });
         }
@@ -227,11 +271,14 @@ export default {
     },
   },
   async created() {
-    const data = await this.getGoodsList(true);
+    const data = await this.getorderlist(true);
 
     this.total = data.length;
 
-    this.goodsList = await this.getGoodsList();
+    this.orderlist = await this.getorderlist();
   },
 };
 </script>
+<style scoped>
+
+</style>
