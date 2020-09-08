@@ -1,62 +1,22 @@
 <template>
-  <div class="wrap">
-    <el-select v-model="value" filterable placeholder="请选择" class="select" @change="changeSel">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-    </el-select>
-    <el-table ref="multipleTable" :data="orderlist" tooltip-effect="dark" style="width: 100%">
+  <div>
+    <el-table
+      :data="tableData"
+      :span-method="objectSpanMethod"
+      border
+      style="width: 100%; margin-top: 20px"
+    >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column type="index" label="#" width="55"></el-table-column>
-      <el-table-column label="用户名" width="150" prop="user_name"></el-table-column>
-      <el-table-column prop="job_title" label="职位" width="200"></el-table-column>
-      <el-table-column prop="company" label="公司" width="200" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="description" label="描述" width="200"></el-table-column>
-      <el-table-column label="操作" width="180">
-        <!-- 需要获取数据id -->
-        <!-- <slot name="title"></slot>
-        <slot :row="item"/>-->
-        <template v-slot:default="scope">
-          <el-button size="small" plain type="success" title="编辑" @click="goto(scope.row._id)">编辑</el-button>
-
-          <el-button
-            size="small"
-            plain
-            type="danger"
-            title="删除该用户"
-            @click="deleteUser(scope.row._id)"
-          >删除</el-button>
-
-          <!--  -->
-          <el-button
-            v-show="scope.row.status===1"
-            size="small"
-            plain
-            type="warning"
-            title="未发货"
-            @click="stopLogin(scope.row._id,$event)"
-          >{{stop}}</el-button>
-          <el-button
-            v-show="scope.row.status===0"
-            size="small"
-            plain
-            type="primary"
-            title="已发货"
-            @click="allowLogin(scope.row._id,$event)"
-          >{{allow}}</el-button>
-        </template>
-      </el-table-column>
+      <el-table-column prop="id" label="ID" width="180"></el-table-column>
+      <el-table-column prop="name" label="用户名"></el-table-column>
+      <el-table-column prop="amount1" label="数值 1（元）"></el-table-column>
+      <el-table-column prop="amount2" label="数值 2（元）"></el-table-column>
+      <el-table-column prop="amount3" label="数值 3（元）"></el-table-column>
     </el-table>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :page-size="pageSize"
-      :current-page="pageNo"
-      :total="total"
-      @current-change="changePage"
-      style="text-align:center"
-    ></el-pagination>
   </div>
 </template>
 <script>
+import getLocalTime from "../../utils/formatTime";
 export default {
   data() {
     return {
@@ -74,11 +34,11 @@ export default {
         },
         {
           value: "选项2",
-          label: "显示已禁用",
+          label: "显示未发货",
         },
         {
           value: "选项3",
-          label: "显示已启用",
+          label: "显示已发货",
         },
       ],
       value: "选项1",
@@ -295,6 +255,7 @@ export default {
     this.orderlist = await this.getOrdersList();
     for (let i = 0; i < this.orderlist.length; i++) {
       let item = this.orderlist[i];
+      this.orderlist[i].createTime = getLocalTime(item.createTime);
       let userItem = await this.$request.get(`/user/${item.userId}`);
       this.orderlist[i].userId = userItem.data.data[0].username;
       this.orderlist[i].goodsList = this.orderlist[i].goodsList
@@ -319,7 +280,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .el-button {
   margin-left: -4px !important;
 }

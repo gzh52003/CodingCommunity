@@ -36,6 +36,7 @@ router.get('/', async (req, res) => {
         res.send(Enum(1002));
     }
 })
+
 // 添加商品
 router.post("/add", async (req, res) => {
     let data = req.body;
@@ -78,7 +79,6 @@ router.get('/classify/:tag', async (req, res) => {
     }
 
 })
-
 // 获取单个商品信息
 router.get('/:id', async (req, res) => {
     const {

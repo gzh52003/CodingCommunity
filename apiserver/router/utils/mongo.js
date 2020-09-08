@@ -27,9 +27,18 @@ async function find(colName, query, options) {
         client,
         db
     } = await connect();
-    if (query._id) {
-        query._id = ObjectId(query._id);
-    }
+    if (query)
+        if (query._id) {
+
+            if (Array.isArray(query._id)) {
+                query._id = query._id.map((item) => {
+                    return ObjectId(item);
+                })
+            } else {
+                query._id = ObjectId(query._id);
+            }
+        }
+
 
     if (options.status) {
         query.status = {
@@ -42,10 +51,16 @@ async function find(colName, query, options) {
     }
     // 选择对应的集合
     const collection = db.collection(colName);
-
-    // 这里有回调函数
-    let result = collection.find(query, opt);
-
+    let result
+    if (Array.isArray(query._id)) {
+        result = await collection.find({
+            _id: {
+                $in: query._id
+            }
+        })
+    } else {
+        result = collection.find(query, opt);
+    }
 
     if (options.sort) {
         let sort = options.sort;

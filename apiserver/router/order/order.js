@@ -89,6 +89,37 @@ router.put('/changeStatus/:id', async (req, res) => {
     }
 })
 
+// 获取一条数据
+router.get('/single', async (req, res) => {
+    const {
+        userId
+    } = req.query;
+    let userInfo = await find("order", {
+        userId
+    })
+    userInfo.forEach(async order => {
+        order.goodsList = JSON.parse(order.goodsList);
+        // order.goodsList = order.goodsList.map(async goodsItem => {
+        //     let info = await find("goods", {
+        //         _id: goodsItem.goodsId
+        //     });
+        //     console.log('info', info[0]);
+        //     goodsItem.goodsInfo = info[0];
+        //     return goodsItem;
+        // })
+        order.queryList = order.goodsList.map(item => {
+            return item.goodsId
+        })
+        await find("goods", {
+            _id: order.queryList
+        }).then((item) => {
+            order.goodsInfos = item;
+            res.send(order)
+        })
+    })
+
+})
+
 // 获取全部订单
 router.get('/', async (req, res) => {
     let {
@@ -125,4 +156,6 @@ router.get('/', async (req, res) => {
         res.send(Enum(1002));
     }
 })
+
+
 module.exports = router
