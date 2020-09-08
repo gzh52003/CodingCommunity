@@ -1,7 +1,8 @@
 
 const cart = {
     state: {
-        goodslist: [{
+        goodslist: [
+        {
             "_id": "5f50a77879a637ba8e5abe70",
             "goodsid": "192441894",
             "pricecurrent": "59.9",
@@ -51,6 +52,11 @@ const cart = {
 
     },
     mutations: {
+        //登录获取商品
+        // getGoods(state){
+
+        // }
+
         // 删除商品
         remove(state) {
             state.goodslist = state.goodslist.filter(item => !item.checked)
