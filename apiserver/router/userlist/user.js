@@ -8,7 +8,7 @@ const { Enum } = require('../utils/Enum');
 const { route } = require('../comment/comment');
 
 router.get('/', async (req, res) => {
-  //查找community中userlist的数据库
+  //查找shop中user的数据库
   const {
     pageNo,
     pageSize,
