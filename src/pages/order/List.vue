@@ -1,298 +1,237 @@
 <template>
   <div>
+    <el-select v-model="value" placeholder="请选择" @change="selected">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-select>
     <el-table
-      :data="tableData"
-      :span-method="objectSpanMethod"
-      border
-      style="width: 100%; margin-top: 20px"
+      :data="goodsList"
+      :stripe="true"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="180"></el-table-column>
-      <el-table-column prop="name" label="用户名"></el-table-column>
-      <el-table-column prop="amount1" label="数值 1（元）"></el-table-column>
-      <el-table-column prop="amount2" label="数值 2（元）"></el-table-column>
-      <el-table-column prop="amount3" label="数值 3（元）"></el-table-column>
+      <el-table-column type="index" label="#" width="100"></el-table-column>
+      <el-table-column prop="three_subtit" label="商品名"></el-table-column>
+      <el-table-column prop="tag" label="分类"></el-table-column>
+      <el-table-column prop="imgUrl" label="商品图片">
+        <template v-slot:default="scope">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="scope.row.imgUrl"
+            :preview-src-list="[scope.row.imgUrl]"
+          ></el-image>
+        </template>
+      </el-table-column>
+      <el-table-column prop="price" label="价格"></el-table-column>
+      <el-table-column prop="rest" label="库存"></el-table-column>
+      <el-table-column prop="options" label="操作">
+        <template v-slot:default="scope">
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            size="small"
+            @click="edit(scope.row._id)"
+            title="修改"
+          ></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            circle
+            size="small"
+            @click="remove(scope.row._id)"
+            title="删除"
+          ></el-button>
+        </template>
+      </el-table-column>
     </el-table>
+    <div style="position:relative; margin-bottom:100px">
+      <el-button
+        type="danger"
+        v-if="multipleSelectionFlag"
+        @click="popDelete"
+        style="position:absolute;right:200px; top:30px"
+      >批量删除</el-button>
+    </div>
+    <el-dialog :visible.sync="multiDeleteVisible" title="提示" width="30%">
+      <span>确定要删除{{removeCount}}条数据吗</span>
+      <span slot="footer">
+        <el-button type="primary" @click="multiDelete">确 定</el-button>
+        <el-button @click="dialogVisible">取 消</el-button>
+      </span>
+    </el-dialog>
+    <el-pagination
+      v-if="showPage"
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="pageSize"
+      :current-page="pageNo"
+      style="text-align:center; margin-top:10px"
+      @current-change="changePage"
+    ></el-pagination>
   </div>
 </template>
 <script>
-import getLocalTime from "../../utils/formatTime";
 export default {
   data() {
     return {
-      orderlist: [],
-      currentId: "",
-      stop: "禁用",
-      allow: "启用",
+      options: [
+        { value: "all", label: "全部" },
+        { value: 5, label: "每页5条" },
+        { value: 10, label: "每页10条" },
+      ],
+      goodsList: [],
+      pageNo: 1,
       pageSize: 5,
       total: 0,
-      pageNo: 1,
-      options: [
-        {
-          value: "选项1",
-          label: "显示全部",
-        },
-        {
-          value: "选项2",
-          label: "显示未发货",
-        },
-        {
-          value: "选项3",
-          label: "显示已发货",
-        },
-      ],
-      value: "选项1",
+      multiDeleteVisible: false,
+      multipleSelectionFlag: false,
+      removeCount: 0,
+      removeArr: [],
+      idArr: [],
+      value: 5,
+      showPage: true,
     };
   },
   methods: {
+    dialogVisible() {
+      this.multiDeleteVisible = false;
+    },
+    classification(data) {
+      return (data = data.map((item) => {
+        switch (item.tag) {
+          case "foods":
+            item.tag = "美食";
+            break;
+          case "living":
+            item.tag = "家居";
+            break;
+          case "cook":
+            item.tag = "厨具";
+            break;
+          case "clothes":
+            item.tag = "服装";
+            break;
+          case "beauty":
+            item.tag = "护肤";
+            break;
+        }
+        return item;
+      }));
+    },
     // 传入的值为真则返回所有数据
-    async getOrdersList(all = false) {
+    async getGoodsList(all = false) {
       let result;
       if (all) {
-        result = await this.$request.get("/order");
+        result = await this.$request.get("/goods");
         let { data } = result.data;
+        data = this.classification(data);
         return data;
       } else {
         result = await this.$request.get(
-          `/order?pageNo=${this.pageNo}&pageSize=${this.pageSize}`
+          `/goods?pageNo=${this.pageNo}&pageSize=${this.pageSize}`
         );
         let { data } = result.data;
+        data = this.classification(data);
         return data;
       }
     },
-    async changeSel() {
-      if (this.value === "选项1") {
+    async selected() {
+      if (this.value === "all") {
+        this.showPage = false;
+        this.goodsList = await this.getGoodsList(true);
+      } else {
+        this.showPage = true;
+        this.pageSize = this.value;
         this.pageNo = 1;
-        const total = await this.$request.get("/user");
-        this.total = total.data.data.length;
-        const { data } = await this.$request.get(
-          "/user?pageNo=" + this.pageNo + "&pageSize=" + this.pageSize
-        );
-
-        this.orderlist = data.data;
-      }
-
-      console.log(this.value);
-      if (this.value === "选项2") {
-        this.pageNo = 1;
-        const total = await this.$request.get("/user?status=0");
-        this.total = total.data.data.length;
-        const { data } = await this.$request.get(
-          "/user?pageNo=" +
-            this.pageNo +
-            "&pageSize=" +
-            this.pageSize +
-            "&status=0"
-        );
-
-        this.orderlist = data.data;
-        // this.orderlist = this.orderlist.filter(item=>{
-        //   return item.status === 0
-        // })
-        // this.total = this.orderlist.length;
-      }
-      if (this.value === "选项3") {
-        this.pageNo = 1;
-        const total = await this.$request.get("/user?status=1");
-        this.total = total.data.data.length;
-        const { data } = await this.$request.get(
-          "/user?pageNo=" +
-            this.pageNo +
-            "&pageSize=" +
-            this.pageSize +
-            "&status=1"
-        );
-        this.orderlist = data.data;
-        // this.orderlist = this.orderlist.filter(item=>{
-        //   return item.status === 1
-        // })
-        //  this.total = this.orderlist.length;
+        this.goodsList = await this.getGoodsList();
       }
     },
     async changePage(pageNo) {
-      // console.log(pageNo);
       this.pageNo = pageNo;
-      if (this.value === "选项1") {
-        const total = await this.$request.get("/user");
-        this.total = total.data.data.length;
-
-        const { data } = await this.$request.get(
-          "/user?pageNo=" + this.pageNo + "&pageSize=" + this.pageSize
-        );
-        this.orderlist = data.data;
-      }
-
-      if (this.value === "选项2") {
-        // this.pageNo = 1
-
-        const { data } = await this.$request.get(
-          "/user?pageNo=" +
-            this.pageNo +
-            "&pageSize=" +
-            this.pageSize +
-            "&status=0"
-        );
-        this.orderlist = data.data;
-        // this.orderlist = this.orderlist.filter((item) => {
-        //   return item.status === 0;
-        // });
-      }
-      if (this.value === "选项3") {
-        // this.pageNo = 1
-        const { data } = await this.$request.get(
-          "/user?pageNo=" +
-            this.pageNo +
-            "&pageSize=" +
-            this.pageSize +
-            "&status=1"
-        );
-        this.orderlist = data.data;
-        // this.orderlist = this.orderlist.filter((item) => {
-        //   return item.status === 1;
-        // });
-      }
+      this.goodsList = await this.getGoodsList();
     },
-    async deleteUser(id) {
-      this.$confirm("你确认要删除该用户吗", "提示", {
+    remove(id) {
+      this.$confirm("确定删除这条评论吗", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(async () => {
-        const { data } = await this.$request.delete("/user/" + id);
-
-        if (data.msg === "success") {
-          this.orderlist = this.orderlist.filter((item) => item._id !== id);
+        const result = await this.$request.delete("/goods/" + id);
+        if (result.data.code === 1001) {
+          this.total--;
+          if (
+            this.total == (this.pageNo - 1) * this.pageSize &&
+            this.total != 0
+          ) {
+            this.pageNo--;
+            this.goodsList = await this.getGoodsList();
+          } else {
+            this.goodsList = this.goodsList.filter((item) => item._id !== id);
+          }
           this.$message({
             type: "success",
-            message: "删除成功!",
+            message: "成功移除一条数据",
           });
         }
       });
     },
-    stopLogin(id) {
-      //console.log(id);
-      this.$confirm("你确认要禁用这条数据吗", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(async () => {
-        const { data } = await this.$request.put("/user/changeStatus/" + id);
-
-        if (data.msg === "success") {
-          this.$message({
-            type: "success",
-            message: "禁用成功!",
-          });
-          const { data } = await this.$request.get(
-            "/user?pageNo=" + this.pageNo + "&pageSize=" + this.pageSize
-          );
-          this.orderlist = data.data;
-        }
-
-        // this.orderlist = this.orderlist.map((item) => {
-        //   if (item.status === 0) {
-        //     console.log(event);
-        //     event.target.style.display = "none";
-        //     event.target.parentElement.style.display = "none";
-        //     event.target.parentElement.nextElementSibling.style.display = "inline-block";
-        //      event.target.parentElement.previousElementSibling.firstElementChild.style.display = "inline-block";
-        //   }
-        //   return item;
-        // });
+    edit(id) {
+      this.$router.push("/goods/edit/" + id);
+    },
+    handleSelectionChange(val) {
+      if (val.length !== 0) {
+        this.multipleSelectionFlag = true;
+      } else {
+        this.multipleSelectionFlag = false;
+      }
+      this.removeCount = val.length;
+      this.removeArr = [];
+      val.forEach((item) => {
+        this.removeArr.push(item);
       });
     },
-
-    allowLogin(id) {
-      console.log(id);
-      this.$confirm("你确认要启用这条数据吗", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(async () => {
-        const { data } = await this.$request.put("/user/changeStatus/" + id);
-
-        if (data.msg === "success") {
-          this.$message({
-            type: "success",
-            message: "启动成功!",
-          });
-          const { data } = await this.$request.get(
-            "/user?pageNo=" + this.pageNo + "&pageSize=" + this.pageSize
-          );
-          this.orderlist = data.data;
-        }
-
-        // this.orderlist = this.orderlist.map((item) => {
-        //   if (item.status === 0) {
-        //     console.log(event.currentTarget);
-        //     console.log(this.status1, item.status);
-        //     event.target.style.display = "none";
-        //     event.target.parentElement.style.display = "none";
-        //     event.target.parentElement.previousElementSibling.style.display = "inline-block";
-        //     event.target.parentElement.previousElementSibling.firstElementChild.style.display = "inline-block";
-        //   }
-        //   return item;
-        // });
-      });
+    popDelete() {
+      this.multiDeleteVisible = true;
     },
+    async multiDelete() {
+      this.removeArr.forEach((item) => {
+        this.idArr.push(item._id);
+      });
+      const idStr = this.idArr.join();
 
-    goto(id) {
-      // 跳转路由传参
-      this.$router.push("/user/edit/" + id);
-      // this.$router.push({
-      //   name: "userEdit",
-      //   params: { id },
-      //   query: {
-      //     a: 10,
-      //     b: 20,
-      //   },
-      // });
+      const result = await this.$request.delete(`/goods/${idStr}`);
+      if (result.data.code === 1001) {
+        this.multiDeleteVisible = false;
+        this.multipleSelectionFlag = false;
+        this.total = this.total - this.removeCount;
+        if (
+          (this.total == (this.pageNo - 1) * this.pageSize ||
+            this.removeCount === this.pageSize) &&
+          this.total !== 0
+        ) {
+          this.pageNo--;
+          this.goodsList = await this.getGoodsList();
+        } else {
+          this.goodsList = this.goodsList.filter((item) => {
+            return !this.idArr.includes(item._id);
+          });
+        }
+        this.idArr = [];
+        this.$message({
+          type: "success",
+          message: "成功移除" + this.removeCount + "条数据",
+        });
+      }
     },
   },
   async created() {
-    const data = await this.getOrdersList(true);
+    const data = await this.getGoodsList(true);
+
     this.total = data.length;
-    this.orderlist = await this.getOrdersList();
-    for (let i = 0; i < this.orderlist.length; i++) {
-      let item = this.orderlist[i];
-      this.orderlist[i].createTime = getLocalTime(item.createTime);
-      let userItem = await this.$request.get(`/user/${item.userId}`);
-      this.orderlist[i].userId = userItem.data.data[0].username;
-      this.orderlist[i].goodsList = this.orderlist[i].goodsList
-        .substring(1, this.orderlist[i].goodsList.length - 1)
-        .split(",");
-      this.orderlist[i].goodsList = this.orderlist[i].goodsList.map((item) => {
-        return {
-          goodsId: item.substring(1, item.length - 1).split(":")[0],
-          goodsTotal: item.substring(1, item.length - 1).split(":")[1],
-        };
-      });
-      this.orderlist[i].goodsItems = [];
-      this.orderlist[i].goodsList.forEach(async (item) => {
-        let res = await this.$request.get("/goods/" + item.goodsId);
 
-        this.orderlist[i].goodsItems.push(res.data.data[0]);
-      });
-    }
-
-    console.log("ss", this.orderlist);
+    this.goodsList = await this.getGoodsList();
   },
 };
 </script>
-
-<style lang='scss' scoped>
-.el-button {
-  margin-left: -4px !important;
-}
-.select {
-  position: relative;
-  /* right: 0px; */
-  transform: translateX(804px);
-}
-.select .el-input__inner {
-  width: 250px !important;
-}
-.select .el-input {
-  width: 250px !important;
-}
-</style>

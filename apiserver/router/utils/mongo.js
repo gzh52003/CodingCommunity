@@ -52,6 +52,7 @@ async function find(colName, query, options) {
     // 选择对应的集合
     const collection = db.collection(colName);
     let result
+    
     if (Array.isArray(query._id)) {
         result = await collection.find({
             _id: {
@@ -61,7 +62,6 @@ async function find(colName, query, options) {
     } else {
         result = collection.find(query, opt);
     }
-
     if (options.sort) {
         let sort = options.sort;
 
