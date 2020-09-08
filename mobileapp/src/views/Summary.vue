@@ -2,11 +2,11 @@
     <div>
         <van-nav-bar left-text="确认订单" left-arrow @click-left="onClickLeft" />
 
-        <van-card :num="item.num" :price="item.pricecurrent" :title="item.title" :thumb="item.imgurl" :key="item._id"
+        <van-card :num="item.total" :price="item.price" :title="item.three_subtit" :thumb="item.imgUrl" :key="item._id"
             v-for="item in goodslist">
             <template #price>
                 <p>
-                    <span>￥{{item.pricecurrent}}</span>
+                    <span>￥{{item.price}}</span>
                 </p>
             </template>
 
@@ -44,7 +44,7 @@
                 return this.$store.state.cart.goodslist.filter(item => item.checked)
             },
             totalPrice() {
-                return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
+                return this.goodslist.reduce((pre, item) => pre + item.price * item.total, 0) * 100;
 
             },
             goodsNum() {

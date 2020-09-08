@@ -6,7 +6,7 @@
         <van-icon name="arrow-left" />
         <span>返回</span>
       </p>
-      <h2>购物车</h2>
+      <h2 @click="saveTrolley">购物车</h2>
       <p @click="change">
         <span v-if="changesuccess">完成</span>
         <span v-else>编辑</span>
@@ -17,21 +17,21 @@
     <!-- 商品订单 -->
 
     <van-card
-      :num="item.num"
-      :price="item.pricecurrent"
-      :title="item.title"
-      :thumb="item.imgurl"
+      :num="item.total"
+      :price="item.price"
+      :title="item.three_subtit"
+      :thumb="item.imgUrl"
       :key="item._id"
       v-for="item in goodslist"
       @click="gotoDetail($event,item._id)"
     >
       <template #tag>
-        <van-checkbox v-model="item.checked"></van-checkbox>
+        <van-checkbox :value="item.checked" @click.stop="singleCheckedChange(item._id)"></van-checkbox>
       </template>
       <template #price>
         <p>
-          <span>￥{{item.pricecurrent}}</span>
-          <van-stepper v-model="item.num" input-width="20px" button-size="20px" />
+          <span>￥{{item.price}}</span>
+          <van-stepper v-model="item.total" input-width="20px" button-size="20px" />
         </p>
       </template>
     </van-card>
@@ -39,13 +39,13 @@
     <!-- 结算订单 -->
     <template v-if="changesuccess">
       <van-submit-bar :price="totalPrice" button-text="删 除" @submit="removeItem">
-        <van-checkbox v-model="check">全选</van-checkbox>
+        <van-checkbox v-model="allCheck">全选</van-checkbox>
       </van-submit-bar>
     </template>
 
     <template v-else>
       <van-submit-bar :price="totalPrice" button-text="结 算" @submit="onSubmit">
-        <van-checkbox v-model="check">全选</van-checkbox>
+        <van-checkbox v-model="allCheck">全选</van-checkbox>
         <template #tip>
           你的收货地址不支持同城送,
           <span>修改地址</span>
@@ -67,6 +67,7 @@ import {
   SubmitBar,
   Stepper,
   Dialog,
+  Toast,
 } from "vant";
 
 Vue.use(Sticky);
@@ -76,6 +77,7 @@ Vue.use(Card);
 Vue.use(Icon);
 Vue.use(SubmitBar);
 Vue.use(Stepper);
+Vue.use(Toast);
 
 export default {
   name: "Cart",
@@ -88,34 +90,58 @@ export default {
     goodslist() {
       return this.$store.state.cart.goodslist;
     },
-    check: {
+    allCheck: {
       get() {
         return this.goodslist.every((item) => item.checked);
       },
       set(val) {
         this.$store.commit("allcheck", val);
-        return this.$store.getters.totalPrice;
+        //return this.$store.getters.totalPrice;
       },
     },
-
     totalPrice() {
       // return this.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
       return this.$store.getters.totalPrice;
     },
   },
   methods: {
+    saveTrolley() {
+      let goodsInfo = this.goodslist.map((item) => {
+        return {
+          goodsId: item._id,
+          goodsTotal: item.total,
+        };
+      });
+      Toast.loading({
+        message: "购物车保存中",
+        forbidClick: true,
+      });
+      this.$request
+        .post("/trolley", {
+          userId: JSON.parse(window.localStorage.getItem("userInfo"))._id,
+          goodsInfo: JSON.stringify(goodsInfo),
+        })
+        .then((res) => {
+          if(res.data.code === 1001){
+            Toast.success('保存成功');
+          }else{
+            Toast.fail('保存失败');
+          }
+          console.log(res.data);
+        });
+    },
+    singleCheckedChange(id) {
+      this.$store.commit("singleCheck", id);
+    },
     goback() {
       this.$router.push("/home/");
     },
     change() {
       this.changesuccess = !this.changesuccess;
     },
-    goback() {
-      this.$router.push("/home/");
-    },
     gotoDetail(e, id) {
       if (e.target.tagName === "IMG") {
-        this.$router.push("/goods/" + id);
+        this.$router.push("/detail/" + id);
       }
     },
     removeItem() {
@@ -135,10 +161,13 @@ export default {
       }
     },
   },
-  created(){
-    let user = JSON.parse(localStorage.getItem('userInfo'));
-    
-  }
+  // async created(){
+  //   let user = JSON.parse(window.localStorage.getItem('userInfo'));
+  //   if(user){
+  //     let trolleyList = await this.$request.get("/trolley/"+user._id);
+  //     console.log(trolleyList);
+  //   }
+  // }
 };
 </script>
 
@@ -154,6 +183,7 @@ export default {
 
   h2 {
     font-size: 20px;
+    padding: 0 20px;
   }
 
   p {

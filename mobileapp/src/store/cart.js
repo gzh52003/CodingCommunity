@@ -1,42 +1,17 @@
-
 const cart = {
     state: {
         goodslist: [
-        {
-            "_id": "5f50a77879a637ba8e5abe70",
-            "goodsid": "192441894",
-            "pricecurrent": "59.9",
-            "priceold": "198",
-            "title": "显龄背带牛仔裤显瘦",
-            "imgurl": "./img/1.jpg",
-            "sold": "剩1天",
-            "num": 3,
-            "checked": false,
-
-        },
-        {
-            "_id": "5f50a77879a637ba8e5abe73",
-            "goodsid": "182441891",
-            "pricecurrent": "49.9",
-            "priceold": "189",
-            "title": "开叉泫雅风牛仔拖地裤",
-            "imgurl": "./img/2.jpg",
-            "sold": "剩1天",
-            "num": 1,
-            "checked": false,
-
-        },
-        {
-            "_id": "5f50a77879a637ba8e5abe76",
-            "goodsid": "102440796",
-            "pricecurrent": "49.9",
-            "priceold": "2190",
-            "title": "网红短裤显高牛仔外套",
-            "imgurl": "./img/0.jpg",
-            "sold": "剩1天",
-            "num": 2,
-            "checked": false,
-        }
+            // {
+            //     comment: 3,
+            //     imgUrl: "http://www.coman.icu/img/beauty/2.jpg",
+            //     price: 199,
+            //     rest: 22,
+            //     tag: "beauty",
+            //     three_subtit: "日本蜜梨薏仁水精选套装",
+            //     total: 1,
+            //     _id: "5f54f86f3a8e61c5bceb294e",
+            //     checked:false
+            // }
         ]
     },
     getters: {
@@ -44,34 +19,58 @@ const cart = {
             return state.goodslist.filter(item => {
                 return item.checked
             }).reduce((pre, cur) => {
-                return pre + cur.pricecurrent * cur.num * 100
+                return pre + cur.price * cur.total * 100
             }, 0)
             // return state.goodslist.reduce((pre, item) => pre + item.pricecurrent * item.num, 0) * 100;
-
         },
 
     },
     mutations: {
-        //登录获取商品
-        // getGoods(state){
-
-        // }
-
+        //清空购物车缓存
+        clearTrolley(state){
+            state.goodslist = [];
+        },
+        //更新购物车商品列表
+        updateTrolley(state, payload) {
+            //payload接收一个静态副本
+            state.goodslist = payload
+        },
         // 删除商品
         remove(state) {
             state.goodslist = state.goodslist.filter(item => !item.checked)
 
         },
-
+        //更改单个check
+        singleCheck(state, payload) {
+            state.goodslist = state.goodslist.map(item => {
+                if (item._id == payload) {
+                    item.checked = !item.checked;
+                }
+                return item
+            })
+        },
         //  全选
-        allcheck(state, check) {
-            state.goodslist.forEach(item => {
-                item.checked = check
+        allcheck(state, payload) {
+            state.goodslist = state.goodslist.map(item => {
+                item.checked = payload
+                return item
             })
         },
 
     },
-    actions: {},
+    actions: {
+        // detailInsertTrolley(context,payload){
+        //     return new Promise((resolve,reject)=>{
+        //         //let res = await 
+
+        //         console.log("商品列表副本",curTrolley);
+        //         this.commit("setCurrentTrolley",context)
+        //         this.commit("trolleyInsert",context.rootState.current.goodsInfo)
+        //         console.log("action",context,payload);
+        //         resolve("action执行成功")
+        //     })
+        // }
+    },
 }
 
 

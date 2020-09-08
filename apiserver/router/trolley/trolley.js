@@ -73,13 +73,14 @@ router.get('/:id',async(req,res)=>{
                         it.total = trItem.goodsTotal
                     }
                 })
-                return item
+                return it
               })
+              console.log(item);
                 cart.trolleyitems =item;
                 res.send(Enum(1001,cart))
             })
     
-        res.send(Enum(1001,cart));
+        //res.send(Enum(1001,cart));
     }
     // cart = cart[0];
    

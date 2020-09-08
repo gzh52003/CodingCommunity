@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
+import store from '@/store/index.js'
 
 Vue.use(VueRouter)
 
@@ -61,3 +62,13 @@ const router = new VueRouter({
 
 export default router
 
+router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
+
+  let user = JSON.parse(localStorage.getItem('userInfo'))
+  if(!user){
+    store.commit("clearTrolley")
+  }
+
+    next()
+
+})

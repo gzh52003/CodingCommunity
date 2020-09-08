@@ -41,9 +41,9 @@
         <van-button round block type="info" native-type="submit">登录</van-button>
       </div>
 
-    <!-- 免费注册 -->
+      <!-- 免费注册 -->
       <div style="margin: 16px;">
-        <van-button type="primary" round block  to="/reg">免费注册</van-button>
+        <van-button type="primary" round block to="/reg">免费注册</van-button>
       </div>
     </van-form>
   </div>
@@ -98,6 +98,13 @@ export default {
           message: "登录成功！",
           theme: "round-button",
         }).then(() => {
+            let user = JSON.parse(window.localStorage.getItem('userInfo'));
+            if(user){
+              this.$request.get("/trolley/"+user._id).then(res=>{
+                this.$store.commit("updateTrolley",res.data.data.trolleyitems)
+                console.log(res.data.data.trolleyitems);
+              })
+            }
           this.$router.replace("/mine");
         });
       } else{
@@ -123,13 +130,13 @@ export default {
   transform: translate(217px, -50px);
   position: absolute;
 }
-.login{
-  h3{
+.login {
+  h3 {
     font-size: 20px;
   }
-  h4{
+  h4 {
     font-size: 20px;
-    margin:10px ;
-  };
+    margin: 10px;
+  }
 }
 </style>

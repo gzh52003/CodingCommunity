@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import cart from './cart'
 import common from './common'
-import tmplist from './tmpgoodslist'
+import current from './currentGoods'
 import {
   Dialog
 } from 'vant'
@@ -31,7 +31,7 @@ const store = new Vuex.Store({
   modules: {
     cart,
     common,
-    tmplist
+    current
   }
 })
 
