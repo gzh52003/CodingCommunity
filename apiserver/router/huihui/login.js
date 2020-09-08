@@ -16,20 +16,21 @@ router.get('/', async (req, res) => {
         username,
         password,
         vcode,
-        mdl
+        mdl,
+        
     } = req.query;
-
+      // console.log("status",status)
     // 从会话中获取验证码
     // 校验验证码
     // console.log('login.session=', req.session)
-    console.log(vcode,req.session.vcode,111111111)
+    console.log(vcode,req.session.vcode,username)
     if (vcode !== req.session.vcode) {
         res.send(formatData({
             code: 10
         }))
         return;
     }
-    console.log(6666)
+
     // 加密后进行查询
     // const hash = crypto.createHash('md5');
     // hash.update(password + 'laoxie'); // 加盐 盐值
@@ -37,11 +38,24 @@ router.get('/', async (req, res) => {
 
     password = md5(password)
 
-    let result = await mongo.find('user', {
+    let result = await mongo.find('userlist', {
         username,
-        password
+        password,
+        
     }); //[{}]
+    console.log("result",result)
+    
+    
+
     if (result.length > 0) {
+      console.log(result[0]);
+        if(result[0].status===1){
+          res.send(formatData({
+            code: 403
+        }))
+          return 
+        }
+
         // 用户名、密码、验证码都校验通过后，判断是否有免登陆选项
         console.log('req.query=', req.query);
         let authorization;

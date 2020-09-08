@@ -5,7 +5,9 @@ function formatData({code=1,data=[],msg='success'}={}){
     if(code === 0){
         msg = 'fail';
     }
-
+    if(code===403){
+      msg = 'forbbiden'
+    }
     return {
         code,
         data,

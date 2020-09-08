@@ -66,6 +66,7 @@ export default {
       vcode: "",
       switchChecked: false,
       vcodeSvg: "",
+      status:0
     };
   },
   created() {
@@ -85,7 +86,9 @@ export default {
       console.log("submit", values);
       const { data } = await this.$request.get("/login", {
         params: {
+          
           ...values,
+          
         },
       });
       console.log(data.code);
@@ -100,7 +103,18 @@ export default {
         }).then(() => {
           this.$router.replace("/mine");
         });
-      } else{
+      } else if(data.code === 403){
+        Dialog.alert({
+          message: "该用户已被禁用！",
+          theme: "round-button",
+        }).then(() => {
+          this.username = "";
+          this.password = "";
+          this.vcode = "";
+        });
+      }
+      
+      else{
         Dialog.alert({
           message: "用户名或密码错误，请重新输入",
           theme: "round-button",

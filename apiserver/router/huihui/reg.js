@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     password = md5(password)
     let result
     try {
-        result = await mongo.insert('user', {
+        result = await mongo.insert('userlist', {
             username,
             password
         });
@@ -54,7 +54,7 @@ router.get('/check', async (req, res) => {
         userName
     } = req.query;
     console.log(444444)
-    const result = await mongo.find('user', {
+    const result = await mongo.find('userlist', {
         username: userName
     });
     if (result.length > 0) {
