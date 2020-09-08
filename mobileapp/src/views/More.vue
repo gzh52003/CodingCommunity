@@ -54,13 +54,15 @@ export default {
     };
   },
   created() {
-    this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    this.userInfo = JSON.parse(localStorage.getItem("userInfo"))||{};
   },
   methods: {
     exit() {
       Dialog.confirm({
         title: "确定要退出吗？",
       }).then(() => {
+           console.log(111111111111111)
+          this.$store.commit('logOut')
         localStorage.removeItem("userInfo");
         this.$router.push("/login");
       });
@@ -72,7 +74,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .van-nav-bar {
   .van-icon {
     color: #646566;

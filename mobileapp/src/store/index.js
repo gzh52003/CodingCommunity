@@ -11,14 +11,21 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-
+    username:''
   },
   getters: {
 
 
   },
   mutations: {
-
+    login11(state,username11){
+      console.log('sta',state,username11)
+      state.username = username11
+    },
+    logOut(state){
+      console.log('login',state)
+      state.username = ''
+    }
   },
   actions: {},
   modules: {

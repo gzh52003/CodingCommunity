@@ -6,10 +6,10 @@
     <el-table ref="multipleTable" :data="userlist" tooltip-effect="dark" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index" label="#" width="55"></el-table-column>
-      <el-table-column label="用户名" width="150" prop="user_name"></el-table-column>
-      <el-table-column prop="job_title" label="职位" width="200"></el-table-column>
-      <el-table-column prop="company" label="公司" width="200" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="description" label="描述" width="200"></el-table-column>
+      <el-table-column label="用户名" width="150" prop="username"></el-table-column>
+      <el-table-column prop="gender" label="性别" width="200"></el-table-column>
+      <el-table-column prop="age" label="年龄" width="200" show-overflow-tooltip></el-table-column>
+      <!-- <el-table-column prop="description" label="描述" width="200"></el-table-column> -->
       <el-table-column label="操作" width="180">
         <!-- 需要获取数据id -->
         <!-- <slot name="title"></slot>
@@ -28,7 +28,7 @@
           <!--  -->
           <el-button
             v-show="scope.row.status===1"
-            size="small"
+            size="small"  
             plain
             type="warning"
             title="禁止登录"
@@ -60,6 +60,7 @@
 export default {
   data() {
     return {
+      gender:'',
       userlist: [],
       currentId: "",
       stop: "禁用",
@@ -283,8 +284,10 @@ export default {
     const { data } = await this.$request.get(
       "/user?pageNo=" + this.pageNo + "&pageSize=" + this.pageSize
     );
+   
     this.userlist = data.data;
-    console.log(this.userlist);
+    
+    console.log(111,this.userlist);
   },
 };
 </script>

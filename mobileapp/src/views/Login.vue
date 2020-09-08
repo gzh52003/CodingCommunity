@@ -1,8 +1,8 @@
 <template>
   <div class="login">
-    <h1>欢迎来到金丰娱乐~</h1>
-    <h2>登录发现惊喜！</h2>
-    <van-image round width="10rem" height="10rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+    <h3>欢迎来到金丰娱乐~</h3>
+    <h4>登录发现惊喜！</h4>
+    <van-image round width="150" height="150" src="https://img.yzcdn.cn/vant/cat.jpeg" />
     <van-form @submit="onSubmit">
       <van-field
         v-model="username"
@@ -26,6 +26,7 @@
         label="验证码"
         placeholder="验证码"
         :rules="[{ required: true, message: tips }]"
+        autocomplete="off"
       ></van-field>
       <div v-html="vcodeSvg" class="vcode" @click="getVcode"></div>
       <!-- 7天免登陆 -->
@@ -69,7 +70,11 @@ export default {
   },
   created() {
     this.getVcode();
+    // this.$store.commit("displayTabbar", false);
   },
+  //  beforeDestroy() {
+  //   this.$store.commit("displayTabbar", true);
+  // },
   methods: {
     async getVcode() {
       let { data } = await this.$request.get("/vcode");
@@ -85,8 +90,10 @@ export default {
       });
       console.log(data.code);
       if (data.code === 1) {
+        this.$store.commit('login11',values.username)
         //设置localStorage
         localStorage.setItem("userInfo", JSON.stringify(data.data));
+
         Dialog.alert({
           message: "登录成功！",
           theme: "round-button",
@@ -105,14 +112,24 @@ export default {
       }
     },
   },
+
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .vcode {
   display: inline-block;
   // position: absolute;
   transform: translate(217px, -50px);
   position: absolute;
+}
+.login{
+  h3{
+    font-size: 20px;
+  }
+  h4{
+    font-size: 20px;
+    margin:10px ;
+  };
 }
 </style>

@@ -34,7 +34,7 @@
         name: 'Summary',
         data() {
             return {
-
+                userInfo:''
             }
         },
         computed: {
@@ -51,11 +51,12 @@
                 this.$router.push('./cart')
             },
             summary() {
-                
+               
             }
         },
         created() {
             this.$store.commit('displayTabbar', false);
+            
         },
 
         beforeDestroy() {

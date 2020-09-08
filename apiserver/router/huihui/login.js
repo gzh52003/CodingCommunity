@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     // 从会话中获取验证码
     // 校验验证码
     // console.log('login.session=', req.session)
-    console.log(vcode,req.session.vcode)
+    console.log(vcode,req.session.vcode,111111111)
     if (vcode !== req.session.vcode) {
         res.send(formatData({
             code: 10

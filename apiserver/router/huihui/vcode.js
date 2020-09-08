@@ -26,7 +26,6 @@ console.log('captcha',captcha);
    // 把验证码存入会话Session
    req.session.vcode = captcha.text.toLowerCase();
 
-
    console.log('vcode.session=', req.session);
 
 
