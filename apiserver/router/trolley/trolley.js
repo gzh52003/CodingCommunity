@@ -36,7 +36,6 @@ router.post('/', async (req, res) => {
         })
     }else{
           const cart_id = userTrolley[0]._id  
-          console.log('cart',cart_id);
         try{ 
             await updateById('trolley',{
             trolleyitems:goodsInfo
@@ -47,6 +46,43 @@ router.post('/', async (req, res) => {
     }
     }
 })
-
+// 获取购物车信息
+router.get('/:id',async(req,res)=>{
+    const {
+        id
+    }=req.params
+    // 查找用户购物车
+   let cart =  await find('trolley',{
+        userId:id
+    })
+    if(cart.length===0){
+        res.send(Enum(1005));
+    }else{
+         cart = cart[0];
+        console.log('goodsInfo',cart);
+        let trolleyitems =JSON.parse (cart.trolleyitems);
+        cart.queryList = trolleyitems.map(item => {
+            return item.goodsId
+        })
+            await find('goods',{
+                _id: cart.queryList
+            }).then(item=>{
+              item = item.map(it=>{
+                trolleyitems.forEach(trItem =>{
+                    if(trItem.goodsId == it._id){
+                        it.total = trItem.goodsTotal
+                    }
+                })
+                return item
+              })
+                cart.trolleyitems =item;
+                res.send(Enum(1001,cart))
+            })
+    
+        res.send(Enum(1001,cart));
+    }
+    // cart = cart[0];
+   
+})
 
 module.exports = router
