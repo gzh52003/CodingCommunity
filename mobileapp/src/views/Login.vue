@@ -1,5 +1,11 @@
 <template>
   <div class="login">
+    <van-nav-bar
+  title="登录页"
+  left-text="返回首页"
+  left-arrow
+  @click-left="onClickLeft"
+/>
     <h3>欢迎来到金丰娱乐~</h3>
     <h4>登录发现惊喜！</h4>
     <van-image round width="150" height="150" src="https://img.yzcdn.cn/vant/cat.jpeg" />
@@ -51,12 +57,13 @@
 
 <script>
 import Vue from "vue";
-import { Form, Field, Button, Switch, Image as VanImage, Dialog } from "vant";
+import { Form, Field, Button, Switch, Image as VanImage, Dialog,NavBar } from "vant";
 Vue.use(VanImage);
 Vue.use(Form);
 Vue.use(Field);
 Vue.use(Button);
 Vue.use(Switch);
+Vue.use(NavBar);
 export default {
   data() {
     return {
@@ -77,6 +84,9 @@ export default {
   //   this.$store.commit("displayTabbar", true);
   // },
   methods: {
+    onClickLeft(){
+      this.$router.push('./home')
+    },
     async getVcode() {
       let { data } = await this.$request.get("/vcode");
       this.vcodeSvg = data.data.svg;
