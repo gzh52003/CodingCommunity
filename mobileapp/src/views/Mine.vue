@@ -32,10 +32,10 @@
       </figure>
      
       <van-grid>
-        <van-grid-item icon="star-o" text="待付款" badge="9" />
-        <van-grid-item icon="eye-o" text="待发货" badge="9" />
-        <van-grid-item icon="shop-collect-o" text="待收货" badge="9" />
-        <van-grid-item icon="discount" text="评价" badge="9" />
+        <van-grid-item icon="star-o" text="待付款" badge="" />
+        <van-grid-item icon="eye-o" text="待发货" badge="" />
+        <van-grid-item icon="shop-collect-o" text="待收货" badge="" />
+        <van-grid-item icon="discount" text="评价" badge="" />
         <van-grid-item icon="discount" text="售后" />
       </van-grid>
     </section>

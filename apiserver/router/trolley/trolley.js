@@ -54,6 +54,7 @@ router.get('/:id',async(req,res)=>{
    let cart =  await find('trolley',{
         userId:id
     })
+    console.log("未处理的购物车=",cart);
     if(cart.length===0){
         res.send(Enum(1005));
     }else{
@@ -73,8 +74,8 @@ router.get('/:id',async(req,res)=>{
                 })
                 return it
               })
-              console.log(item);
                 cart.trolleyitems =item;
+                //console.log(cart);
                 res.send(Enum(1001,cart))
             })
     

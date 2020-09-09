@@ -67,11 +67,9 @@ export default {
   },
   watch: {
     "$route.path"(newVal, oldVal) {
-      
-      if(newVal === '/login' || newVal === '/reg'){
-        
+      if (newVal === "/login" || newVal === "/reg") {
         this.$store.state.common.showTabbar = false;
-      }else{
+      } else {
         this.$store.state.common.showTabbar = true;
       }
     },
@@ -85,8 +83,15 @@ export default {
     },
   },
   created() {
-    // this.$store.dispatch('getCart');
-    console.log(this.$store);
+    let user = JSON.parse(window.localStorage.getItem("userInfo"));
+    if (user) {
+      this.$request.get("/trolley/"+user._id).then(res=>{
+        console.log(res);
+      this.$store.commit("updateTrolley",res.data.data.trolleyitems)
+      })
+    }else{
+      this.$store.commit("clearTrolley");
+    }
   },
 };
 </script>

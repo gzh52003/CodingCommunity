@@ -122,12 +122,14 @@ export default {
           goodsInfo: JSON.stringify(goodsInfo),
         })
         .then((res) => {
-          if(res.data.code === 1001){
-            Toast.success('保存成功');
-          }else{
-            Toast.fail('保存失败');
+          if (res.data.code === 1001) {
+            Toast.success("保存成功");
+          } else {
+            Toast.fail("保存失败");
           }
-          console.log(res.data);
+        })
+        .catch((res) => {
+          Toast.fail("服务器无响应");
         });
     },
     singleCheckedChange(id) {
@@ -154,20 +156,23 @@ export default {
         .catch(() => {});
     },
     onSubmit() {
-      if (this.$store.state.username === "") {
-        this.$router.push("./login");
-      } else {
+      if (window.localStorage.getItem("userInfo")) {
         this.$router.push("./summary");
+      } else {
+        this.$router.push("./login");
       }
     },
   },
-  // async created(){
-  //   let user = JSON.parse(window.localStorage.getItem('userInfo'));
-  //   if(user){
-  //     let trolleyList = await this.$request.get("/trolley/"+user._id);
-  //     console.log(trolleyList);
-  //   }
-  // }
+  created() {
+    // let user = JSON.parse(window.localStorage.getItem("userInfo"));
+    // if (user) {
+    //   this.$request.get("/trolley/" + user._id).then((res) => {
+    //     this.$store.commit("updateTrolley", res.data.data.trolleyitems);
+    //   });
+    // } else {
+    //   this.$store.commit("clearTrolley");
+    // }
+  },
 };
 </script>
 
