@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import store from '@/store/index.js'
-
+import request from '@/utils/request.js'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -65,10 +65,27 @@ export default router
 router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登录状态)
 
   let user = JSON.parse(localStorage.getItem('userInfo'))
-  if(!user){
+  if (!user) {
     store.commit("clearTrolley")
   }
+  if (from.name == 'cart') {
+    console.log(store.state.cart.goodslist);
+    let localTrolley = store.state.cart.goodslist.map(item => {
+      return {
+        goodsId: item._id,
+        goodsTotal: item.total,
+      };
+    })
+    request.post("/trolley", {
+      userId: user._id,
+      goodsInfo: JSON.stringify(localTrolley),
+    }).then(res=>{
+      if(res.data.code === 1001){
+        console.log("购物车保存成功");
+      }
+    })
+  }
 
-    next()
+  next()
 
 })

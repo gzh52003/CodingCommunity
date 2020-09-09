@@ -95,7 +95,6 @@ export default {
                     goodsInfo: JSON.stringify(surplus),
                   })
                   .then((res) => {
-                      console.log("summary",res);
                     if (res.data.code === 1001) {
                       this.$store.commit("updateTrolley", localSurplus);
                       this.$router.replace("./cart");
