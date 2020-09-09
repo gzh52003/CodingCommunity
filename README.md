@@ -3,8 +3,9 @@
 
 ## 演示
 
-    - 官网：
-    - 上线地址：
+    - 官网：https://m.ugoshop.com/
+    - 上线地址：http://coman.icu:8081
+    -  后台管理系统赋值 : http://coman.icu:8080
 
 ## git仓库地址
 
