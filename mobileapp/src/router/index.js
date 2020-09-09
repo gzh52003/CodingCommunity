@@ -5,7 +5,8 @@ import store from '@/store/index.js'
 import request from '@/utils/request.js'
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     redirect: '/home'
   },
@@ -57,6 +58,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
+  mode:"history",
   routes
 })
 
@@ -69,7 +71,6 @@ router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登
     store.commit("clearTrolley")
   }
   if (from.name == 'cart') {
-    console.log(store.state.cart.goodslist);
     let localTrolley = store.state.cart.goodslist.map(item => {
       return {
         goodsId: item._id,

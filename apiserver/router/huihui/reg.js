@@ -16,9 +16,7 @@ router.post('/', async (req, res) => {
         password,
         yzm
     } = req.body;
-    console.log('username=', username)
-    console.log('password=', password)
-    console.log('yzm=', yzm)
+    
     console.log('req.session.Sms',req.session.Sms)
     if (yzm !== req.session.Sms) {
       res.send(formatData({
@@ -34,9 +32,11 @@ router.post('/', async (req, res) => {
     password = md5(password)
     let result
     try {
+        const status = 1;
         result = await mongo.insert('userlist', {
             username,
-            password
+            password,
+            status
         });
         res.send(formatData({
             data: result

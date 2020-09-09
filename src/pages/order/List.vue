@@ -155,10 +155,10 @@ export default {
         let { data } = result.data;
         data = data.map(item=>{
           item.createTime = getLocalTime(item.createTime);
-        if(item.status===1){
+        if(item.status===0){
                   item.buttonVisible = true
           }else{
-            item.buttonVisible = true
+            item.buttonVisible = false
           }
           return item
         })
@@ -171,7 +171,7 @@ export default {
         let { data } = result.data;
       data = data.map(item=>{
           item.createTime = getLocalTime(item.createTime);
-          if(item.status===1){
+          if(item.status===0){
             item.buttonVisible = true
           }else{
             item.buttonVisible = false
