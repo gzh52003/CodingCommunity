@@ -113,7 +113,6 @@ export default {
   },
   methods: {
    async orderDetail(id){
-     console.log(1);
      this.dialogTableVisible = true
      let obj ={}
      const result =await this.$request.get('/order/detail/'+id);
@@ -245,7 +244,7 @@ export default {
       });
       const idStr = this.idArr.join();
 
-      const result = await this.$request.delete(`/goods/${idStr}`);
+      const result = await this.$request.delete(`/order/${idStr}`);
       if (result.data.code === 1001) {
         this.multiDeleteVisible = false;
         this.multipleSelectionFlag = false;
