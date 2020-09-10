@@ -49,20 +49,24 @@ export default {
   methods: {
     scrollRun: function () {
       // 核心代码
-      if (this.loadMore) {
-        //
-        let bodyWidth = document.body.offsetWidth;
-        let bodyHeight = window.innerHeight * (375 / bodyWidth); // 以6s屏幕为基准比例
-        let loadMoreTop =
-          document.getElementById("loadMoreing").getBoundingClientRect().top *
-          (375 / bodyWidth); //loadMore距离顶部的距离
+      try{
+        if (this.loadMore) {
+          //
+          let bodyWidth = document.body.offsetWidth;
+          let bodyHeight = window.innerHeight * (375 / bodyWidth); // 以6s屏幕为基准比例
+          let loadMoreTop =
+            document.getElementById("loadMoreing").getBoundingClientRect().top *
+            (375 / bodyWidth); //loadMore距离顶部的距离
 
-        if (bodyHeight - loadMoreTop > 50) {
-          //loadMore被拉出底部50px时
-          // console.log("bodyHeight",bodyHeight,"loadMoreTop",loadMoreTop,"差值",bodyHeight-loadMoreTop,"页码",this.dataCurPage+1);
-          this.loadMore = false; //停止运行scrollRun,防止同一时间多次加载
-          this.getMoreList();
+          if (bodyHeight - loadMoreTop > 50) {
+            //loadMore被拉出底部50px时
+            // console.log("bodyHeight",bodyHeight,"loadMoreTop",loadMoreTop,"差值",bodyHeight-loadMoreTop,"页码",this.dataCurPage+1);
+            this.loadMore = false; //停止运行scrollRun,防止同一时间多次加载
+            this.getMoreList();
+          }
         }
+      }catch(err){
+        console.log(err);
       }
     },
     async getMoreList() {

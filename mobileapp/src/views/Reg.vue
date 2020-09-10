@@ -124,7 +124,6 @@ export default {
     },
 
     async checkUsername(){
-      console.log(this.username)
         const { data } = await this.$request.get("/reg/check", {
           params: {
             userName: this.username,
@@ -140,7 +139,6 @@ export default {
     //发送验证码
     async sendma() {
       this.sendClick = false;
-      console.log(this.ma);
       const { data } = await this.$request.get(`/sendSms/${this.ma}`);
     },
     //倒计时完成
@@ -170,11 +168,9 @@ export default {
 
       //code===1，不重名可以注册
       if (data.code === 1) {
-        console.log(values);
         const { data } = await this.$request.post("/reg", {
           ...values,
         });
-        console.log(data);
         if (data.code === 10) {
           Dialog.alert({
             title: "用户名已注册或验证码输入错误",
@@ -196,7 +192,6 @@ export default {
           message: "重新选个好名字吧或检查验证码是否有误",
           theme: "round-button",
         });
-        console.log("data.code", data.code);
       }
     },
   },

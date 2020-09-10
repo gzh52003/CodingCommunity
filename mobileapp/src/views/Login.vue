@@ -93,7 +93,6 @@ export default {
     },
     //点击后发起请求
     async onSubmit(values) {
-      console.log("submit", values);
       const { data } = await this.$request.get("/login", {
         params: {
           
@@ -101,7 +100,6 @@ export default {
           
         },
       });
-      console.log(data.code);
       if (data.code === 1) {
         this.$store.commit('login11',values.username)
         //设置localStorage
@@ -115,7 +113,6 @@ export default {
             if(user){
               this.$request.get("/trolley/"+user._id).then(res=>{
                 this.$store.commit("updateTrolley",res.data.data.trolleyitems)
-                console.log(res.data.data.trolleyitems);
               })
             }
           this.$router.replace("/mine");
