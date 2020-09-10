@@ -1,18 +1,6 @@
 const cart = {
     state: {
-        goodslist: [
-            // {
-            //     comment: 3,
-            //     imgUrl: "http://www.coman.icu/img/beauty/2.jpg",
-            //     price: 199,
-            //     rest: 22,
-            //     tag: "beauty",
-            //     three_subtit: "日本蜜梨薏仁水精选套装",
-            //     total: 1,
-            //     _id: "5f54f86f3a8e61c5bceb294e",
-            //     checked:false
-            // }
-        ]
+        goodslist: []
     },
     getters: {
         totalPrice(state) {

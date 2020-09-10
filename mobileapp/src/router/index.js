@@ -5,7 +5,8 @@ import store from '@/store/index.js'
 import request from '@/utils/request.js'
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     redirect: '/home'
   },
@@ -57,6 +58,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
+  mode:"history",
   routes
 })
 

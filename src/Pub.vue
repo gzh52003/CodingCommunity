@@ -5,10 +5,10 @@
         <el-col :span="12" class="logo">
           <i class="el-icon-connection"></i>后台管理系统
         </el-col>
-        <el-col :span="12" style="text-align:right">
+        <!-- <el-col :span="12" style="text-align:right">
           {{this.name + ' 欢迎你！'}}
           <el-button @click="loginOut" style="color:#fff" type="info" size="small">退出</el-button>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-header>
 
@@ -69,7 +69,7 @@ export default {
       menu: [
         {
           text: "首页",
-          path: "/home",
+          path: "/public/home",
           icon: "el-icon-s-home",
         },
         {

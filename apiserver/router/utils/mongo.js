@@ -29,7 +29,6 @@ async function find(colName, query, options) {
     } = await connect();
     if (query)
         if (query._id) {
-
             if (Array.isArray(query._id)) {
                 query._id = query._id.map((item) => {
                     return ObjectId(item);

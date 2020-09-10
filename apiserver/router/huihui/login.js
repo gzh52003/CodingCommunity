@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
 
     if (result.length > 0) {
       console.log(result[0]);
-        if(result[0].status===1){
+        if(result[0].status===0){
           res.send(formatData({
             code: 403
         }))

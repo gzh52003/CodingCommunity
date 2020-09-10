@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import cart from './cart'
-import common from './common'
-import current from './currentGoods'
-import {
-  Dialog
-} from 'vant'
+import cart from '@/store/cart'
+import common from '@/store/common'
+import current from '@/store/currentGoods'
+// import {
+//   Dialog
+// } from 'vant'
 
 Vue.use(Vuex)
 
