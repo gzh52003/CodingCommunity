@@ -31,7 +31,7 @@ const cart = {
             state.goodslist = [];
         },
         //更新购物车商品列表
-        updateTrolley(state, payload) {
+        updateTrolley(state, payload = []) {
             //payload接收一个静态副本
             state.goodslist = payload
         },
