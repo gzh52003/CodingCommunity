@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-container>
-      <el-header class="header">掘金社区</el-header>
+      <el-header class="header">UGO 商城</el-header>
     </el-container>
     <h2>欢迎登录</h2>
     <el-row type="flex" justify="center">
@@ -137,7 +137,7 @@
     .header {
       padding-left: 100px;
       background-color: #fff;
-      color: #409eff;
+      color: #f70800;
       font-family: "Microsoft YaHei";
       font-size: 30px;
       border-bottom: 1px solid #f1f1f1;
@@ -146,7 +146,7 @@
       .header {
         padding-left: 100px;
         background-color: #fff;
-        color: #409eff;
+        color: #f70800;
         font-family: "Microsoft YaHei";
         font-size: 30px;
         border-bottom: 1px solid #f1f1f1;
