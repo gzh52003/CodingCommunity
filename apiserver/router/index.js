@@ -1,5 +1,4 @@
 const goods = require('./goods/goods')
-const blog = require('./blog')
 const express = require('express')
 const session = require("express-session")
 const order = require('./order/order')
@@ -33,7 +32,6 @@ router.use(cors)
 // router.use('/user', user)
 router.use('/user', user)
 router.use('/goods', goods);
-router.use('/blog', blog);
 router.use('/asd', user);
 //注册登入
 router.use('/login', login);

@@ -3,7 +3,7 @@
     <el-header class="header">
       <el-row>
         <el-col :span="12" class="logo">
-          <i class="el-icon-connection"></i>后台管理系统
+          <i class="el-icon-connection"></i>Ugo后台管理系统
         </el-col>
         <el-col :span="12" style="text-align:right">
           {{this.name + ' 欢迎你！'}}

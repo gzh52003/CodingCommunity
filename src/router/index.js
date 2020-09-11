@@ -12,8 +12,6 @@ import User from '../pages/user/Default.vue'
 import UserAdd from '../pages/user/Add.vue'
 import UserEdit from '../pages/user/Edit.vue'
 
-import Blogs from '../pages/blogs/Default.vue'
-import BlogsHome from '../pages/blogs/Blogs.vue'
 
 // import Comments from '../pages/comments/Default.vue'
 // import CommentsHome from '../pages/comments/Comments.vue'
@@ -62,17 +60,6 @@ const router = new VueRouter({
         name: 'userEdit',
         path: 'edit/:id',
         component: UserEdit
-      }]
-    },
-    {
-      path: '/blogs',
-      component: Blogs,
-      children: [{
-        path: '',
-        redirect: 'blogshome'
-      }, {
-        path: 'blogshome',
-        component: BlogsHome
       }]
     },
     {

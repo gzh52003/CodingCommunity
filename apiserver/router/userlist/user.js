@@ -5,7 +5,6 @@ const router = express.Router();
 const mongo = require('../utils/mongo')
 
 const { Enum } = require('../utils/Enum');
-const { route } = require('../comment/comment');
 
 router.get('/', async (req, res) => {
   //查找shop中user的数据库

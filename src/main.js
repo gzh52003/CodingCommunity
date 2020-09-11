@@ -5,6 +5,10 @@ import ElementUI from 'element-ui'
 import request from '@/utils/request'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from '@/store'
+import echarts from 'echarts'
+
+
+Vue.prototype.$echarts = echarts
 Vue.use(ElementUI)
 
 // 通过原型链共享ajax请求的方法
