@@ -16,6 +16,8 @@ const {
 const login = require('./huihui/login')
 const reg = require('./huihui/reg');
 
+const apilogin = require('./huihui/apilogin')
+const apireg = require('./huihui/apireg')
 router.use(express.urlencoded({
     extended: false
 }), express.json())
@@ -36,6 +38,12 @@ router.use('/asd', user);
 //注册登入
 router.use('/login', login);
 router.use('/reg', reg);
+
+
+// 后台登录注册
+router.use('/apilogin', apilogin);
+router.use('/apireg', apireg);
+
 // 校验token
 router.get('/jwtverify', (req, res) => {
     const {
