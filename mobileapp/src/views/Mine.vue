@@ -25,7 +25,7 @@
       </van-grid> 
     </section>
 
-    <section class="myOrder">
+    <section class="myOrder" @click='gotoOrder'>
       <figure>
          <h2 style="font-size:16px">我的订单</h2>
          <span style="font-size:16px;line-height:43px">查看全部订单》</span>
@@ -33,8 +33,8 @@
      
       <van-grid>
         <van-grid-item icon="star-o" text="待付款" badge="" />
-        <van-grid-item icon="eye-o" text="待发货" badge="" />
-        <van-grid-item icon="shop-collect-o" text="待收货" badge="" />
+        <van-grid-item icon="eye-o" text="待发货" :badge="undeliver?undeliver:''" />
+        <van-grid-item icon="shop-collect-o" text="待收货" :badge="delivered?delivered:''" />
         <van-grid-item icon="discount" text="评价" badge="" />
         <van-grid-item icon="discount" text="售后" />
       </van-grid>
@@ -64,18 +64,39 @@ export default {
   data(){
     return{
       userInfo:'',
-      
+      undeliver:'',
+      delivered:'',
     }
   },
 
-  created(){
+  async created(){
     // this.userInfo = localStorage.getItem('userInfo')
     // console.log(JSON.parse(this.userInfo))
      this.userInfo = JSON.parse(localStorage.getItem('userInfo'))||{username:'请登录'}
+     const userId = this.userInfo._id
+     const{ data } = await this.$request.get('/order/userOrder?userId='+userId)
+     let userOrder = data.data
+     console.log(userOrder)
+
+     this.undeliver = userOrder.filter(item=>{
+        if(item.status === 0){
+          return item
+     }
+     }).length
+
+    this.delivered = userOrder.filter(item=>{
+      if(item.status== 1){
+        return item
+      }
+    }).length
+
   },
 
   
   methods: {
+    gotoOrder(){
+      this.$router.push('/order')
+    },
     onClickLeft() {
       Toast('返回');
       this.$router.back()

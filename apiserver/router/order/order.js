@@ -93,7 +93,6 @@ router.get('/detail/:id',async(req,res)=>{
     const {
         id
     }=req.params;
-    console.log(id);
     let orderInfo = await find('order',{
         _id:id
     })
@@ -144,7 +143,20 @@ router.get('/single', async (req, res) => {
     })
 
 })
-
+//获取用户订单
+router.get('/userOrder',async(req,res)=>{
+  const{
+    userId
+  } =req.query;
+  let userInfo = await find("order", {
+    userId
+})
+if(userInfo.length===0){
+  res.send(Enum(1006))
+}else{
+  res.send(Enum(1001,userInfo))
+}
+})
 // 获取全部订单
 router.get('/', async (req, res) => {
     let {
