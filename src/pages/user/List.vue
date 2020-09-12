@@ -7,7 +7,7 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index" label="#" width="55"></el-table-column>
       <el-table-column label="用户名" width="150" prop="username"></el-table-column>
-      <el-table-column prop="gender" label="性别" width="200"></el-table-column>
+      <el-table-column prop="phonenumber" label="手机号" width="200"></el-table-column>
       <el-table-column prop="age" label="年龄" width="200" show-overflow-tooltip></el-table-column>
       <!-- <el-table-column prop="description" label="描述" width="200"></el-table-column> -->
       <el-table-column label="操作" width="180">

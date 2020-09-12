@@ -14,7 +14,8 @@ router.post('/', async (req, res) => {
     let {
         username,
         password,
-        yzm
+        yzm,
+        ma
     } = req.body;
     
     console.log('req.session.Sms',req.session.Sms)
@@ -36,7 +37,8 @@ router.post('/', async (req, res) => {
         result = await mongo.insert('userlist', {
             username,
             password,
-            status
+            status,
+            phonenumber:ma
         });
         res.send(formatData({
             data: result

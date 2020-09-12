@@ -168,6 +168,7 @@ export default {
 
       //code===1，不重名可以注册
       if (data.code === 1) {
+      
         const { data } = await this.$request.post("/reg", {
           ...values,
         });
