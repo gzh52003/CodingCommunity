@@ -130,7 +130,7 @@ router.beforeEach(async (to, from, next) => { // 路由跳转前监控(保证登
   }
   let user = JSON.parse(localStorage.getItem('token'))
 
-  let res = await axios.get('http://localhost:10000/api/jwtverify', {
+  let res = await axios.get('http://coman.icu:10000/api/jwtverify', {
     params: {
       authorization: user
     }

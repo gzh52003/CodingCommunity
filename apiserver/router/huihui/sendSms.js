@@ -8,8 +8,7 @@ router.get('/:PhoneNumbers', (req, res) => {
     const {
         PhoneNumbers
     } = req.params
-    let randomNum = (parseInt((Math.random() * 9900) + 100)).toString();
-    randomNum = randomNum.padStart(4, '0');
+    let randomNum = (parseInt((Math.random() * 9000) + 1000)).toString();
     const TemplateParam = `{"code":${randomNum}}`
     req.session.Sms = randomNum
     var client = new Core({
